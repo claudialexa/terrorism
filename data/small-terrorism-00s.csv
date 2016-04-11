@@ -1,0 +1,181 @@
+Region,Year,Incidents
+Australia & Oceania,2000,6
+Australia & Oceania,2001,4
+Australia & Oceania,2002,2
+Australia & Oceania,2003,4
+Australia & Oceania,2004,3.5
+Australia & Oceania,2005,3.5
+Australia & Oceania,2006,2
+Australia & Oceania,2007,1
+Australia & Oceania,2008,8
+Australia & Oceania,2009,1
+Australia & Oceania,2010,1
+Australia & Oceania,2011,3.5
+Australia & Oceania,2012,3.5
+Australia & Oceania,2013,1
+Australia & Oceania,2014,8
+Central America & Caribbean,2000,14
+Central America & Caribbean,2001,8
+Central America & Caribbean,2002,3
+Central America & Caribbean,2003,8
+Central America & Caribbean,2004,5
+Central America & Caribbean,2005,3
+Central America & Caribbean,2006,5
+Central America & Caribbean,2007,4
+Central America & Caribbean,2008,5.8
+Central America & Caribbean,2009,9
+Central America & Caribbean,2010,1
+Central America & Caribbean,2011,1
+Central America & Caribbean,2012,1
+Central America & Caribbean,2013,14
+Central America & Caribbean,2014,5
+Central Asia,2000,21
+Central Asia,2001,18
+Central Asia,2002,6
+Central Asia,2003,7
+Central Asia,2004,8
+Central Asia,2005,11
+Central Asia,2006,6
+Central Asia,2007,4
+Central Asia,2008,36
+Central Asia,2009,31
+Central Asia,2010,9
+Central Asia,2011,9
+Central Asia,2012,12
+Central Asia,2013,7
+Central Asia,2014,9
+East Asia,2000,19
+East Asia,2001,20
+East Asia,2002,4
+East Asia,2003,6
+East Asia,2004,4
+East Asia,2005,2
+East Asia,2006,2
+East Asia,2007,11.1
+East Asia,2008,25
+East Asia,2009,8
+East Asia,2010,1
+East Asia,2011,4
+East Asia,2012,4
+East Asia,2013,14
+East Asia,2014,42
+Eastern Europe,2000,234
+Eastern Europe,2001,252
+Eastern Europe,2002,112
+Eastern Europe,2003,100
+Eastern Europe,2004,45
+Eastern Europe,2005,75
+Eastern Europe,2006,70
+Eastern Europe,2007,62
+Eastern Europe,2008,209
+Eastern Europe,2009,165
+Eastern Europe,2010,260
+Eastern Europe,2011,198
+Eastern Europe,2012,173
+Eastern Europe,2013,165
+Eastern Europe,2014,954
+Middle East & North Africa,2000,272
+Middle East & North Africa,2001,362
+Middle East & North Africa,2002,327
+Middle East & North Africa,2003,295
+Middle East & North Africa,2004,487
+Middle East & North Africa,2005,884
+Middle East & North Africa,2006,1179
+Middle East & North Africa,2007,1380
+Middle East & North Africa,2008,1535
+Middle East & North Africa,2009,1361
+Middle East & North Africa,2010,1463
+Middle East & North Africa,2011,1662
+Middle East & North Africa,2012,2409
+Middle East & North Africa,2013,4551
+Middle East & North Africa,2014,6913
+North America,2000,42
+North America,2001,47
+North America,2002,33
+North America,2003,33
+North America,2004,12
+North America,2005,24
+North America,2006,15
+North America,2007,19
+North America,2008,32
+North America,2009,16
+North America,2010,24
+North America,2011,11
+North America,2012,31
+North America,2013,27
+North America,2014,26
+South America,2000,150
+South America,2001,229
+South America,2002,162
+South America,2003,117
+South America,2004,42
+South America,2005,49
+South America,2006,50
+South America,2007,47
+South America,2008,144
+South America,2009,159
+South America,2010,148
+South America,2011,106
+South America,2012,131
+South America,2013,178
+South America,2014,280
+South Asia,2000,355
+South Asia,2001,385
+South Asia,2002,332
+South Asia,2003,353
+South Asia,2004,369
+South Asia,2005,603
+South Asia,2006,938
+South Asia,2007,985
+South Asia,2008,1743
+South Asia,2009,1946
+South Asia,2010,1976
+South Asia,2011,2136
+South Asia,2012,3799
+South Asia,2013,4606
+South Asia,2014,4987
+Southeast Asia,2000,256
+Southeast Asia,2001,186
+Southeast Asia,2002,110
+Southeast Asia,2003,145
+Southeast Asia,2004,95
+Southeast Asia,2005,204
+Southeast Asia,2006,272
+Southeast Asia,2007,364
+Southeast Asia,2008,513
+Southeast Asia,2009,562
+Southeast Asia,2010,473
+Southeast Asia,2011,353
+Southeast Asia,2012,592
+Southeast Asia,2013,1193
+Southeast Asia,2014,1076
+Sub-Saharan Africa,2000,192
+Sub-Saharan Africa,2001,162
+Sub-Saharan Africa,2002,121
+Sub-Saharan Africa,2003,73
+Sub-Saharan Africa,2004,35
+Sub-Saharan Africa,2005,59
+Sub-Saharan Africa,2006,114
+Sub-Saharan Africa,2007,302
+Sub-Saharan Africa,2008,380
+Sub-Saharan Africa,2009,283
+Sub-Saharan Africa,2010,330
+Sub-Saharan Africa,2011,492
+Sub-Saharan Africa,2012,1151
+Sub-Saharan Africa,2013,990
+Sub-Saharan Africa,2014,2305
+Western Europe,2000,253
+Western Europe,2001,234
+Western Europe,2002,120
+Western Europe,2003,121
+Western Europe,2004,59
+Western Europe,2005,100
+Western Europe,2006,98
+Western Europe,2007,73
+Western Europe,2008,163
+Western Europe,2009,181
+Western Europe,2010,133
+Western Europe,2011,93
+Western Europe,2012,188
+Western Europe,2013,253
+Western Europe,2014,213

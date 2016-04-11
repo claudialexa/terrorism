@@ -1,7 +1,416 @@
 <!DOCTYPE html>
-<html>
+<!-- mod of Mike Bostock's block http://bl.ocks.org/mbostock/3020685 -->
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 11px sans-serif;
+  margin: 20px;
+  padding: 20px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #999999;
+  stroke-width: 1.5px;
+}
+
+.area {
+  fill: #dedede;
+}
+
+button {
+  background: #ccc;
+  margin: 5px;
+
+}
+.selected {
+  background: orange;
+}
+
+.layer {
+  fill: white;
+}
+
+.label {
+  fill: steelblue;
+  font-weight:bold;
+  z-index: 4;
+}
+
+.endpoint {
+  fill: #666;
+}
+
+.y.axis text {
+  fill: steelblue;
+}
+
+</style>
 <body>
-<h1>The Beginning</h1>
-<p>of my d3 death</p>
-</body>
-</html>
+
+  <h1>Countries with the Most Terrorist Attacks, 2000-2014</h1>
+
+  <p>Terrorist attacks have increased by 8000% since the 1970s due to an increase in the scale of the attacks and ideology behind the movements. From 1970 until 1995, suicide attacks were non-existent. Modern terrorist groups are more likely to use Medieval practices outlined in religious texts than their predecessors, making for violence that had rarely been seen in the past twenty years. Modern terrorists are also no longer restricted to national borders as they were in Latin America in the 80s and 90s. Islamic Extremists' cells expand well beyond their headquarters, expanding terror along the entire Middle East.</p>
+
+  <button id="stream">Stream</button> <button id="stacked" class="selected">Stack</button>
+
+  <div id="chart"></div>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+  <script>
+
+(function() {
+
+var originaldata;
+
+var formatDate = d3.time.format("Year %Y");
+
+var fullheight = 620, fullwidth = 960;
+var margin = {top: 20, right: 170, bottom: 50, left: 40},    width = fullwidth - margin.left - margin.right,
+    height = fullheight - margin.top - margin.bottom;
+
+var xScale = d3.time.scale()
+    .range([0, width]);
+
+var yScale = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category20();
+
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+    .ticks(10);
+
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left");
+
+var stack = d3.layout.stack()
+    .offset("zero") // try "silhouette" next, that's a streamgraph!
+    //.order("inside-out")  // try this and see what you think
+    .values(function(d) { return d.values; })
+    .x(function(d) { return formatDate.parse(d.Year);})
+    .y(function(d) { return +d.Incidents_total; });
+
+  // exactly the same except for offset:
+
+var stream = d3.layout.stack()
+    .offset("silhouette") // try "silhouette" next, that's a streamgraph!
+    //.order("inside-out")  // try this and see what you think
+    .values(function(d) { return d.values; })
+    .x(function(d) { return formatDate.parse(d.Year);})
+    .y(function(d) { return +d.Incidents_total; });
+
+// what's another way we can DRY this out? how about just updating the "offset" when we do the redraw below...
+
+var area = d3.svg.area()
+    .interpolate("cardinal")
+    .x(function(d) { return xScale(formatDate.parse(d.Year)); })
+    .y0(function(d) { return yScale(d.y0); })
+    .y1(function(d) { return yScale(d.y0 + d.y); });
+
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", fullwidth)
+    .attr("height", fullheight)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("data/global-terrorism-incidents.csv", setup);
+
+function setup(error, data) {
+
+  if (error) { console.log(error) };
+
+  originaldata = data; // assign to a global so i can use it in other function
+
+  var dataset =  d3.nest()
+    .key(function(d) {
+      return d.Country;
+    })
+    // .sortKeys(d3.descending)  // alphabetic order from top layer
+    .sortValues(function (a, b) { return formatDate.parse(a.Year) - formatDate.parse(b.Year)})
+    .entries(data);
+
+  console.log(dataset);
+
+  // set up the UI function:
+
+  d3.selectAll("button").on("click", function() {
+    var method = d3.select(this).attr("id"); // this is stream or stacked
+    d3.selectAll("button").classed("selected", false);
+    d3.select(this).classed("selected", true);
+    redraw(dataset, method);
+  });
+
+  // default first view: create the axes, so you transition them in the redraw.
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+  redraw(dataset, "stacked");  // method is either stacked or stream
+
+  var countryNames = d3.map(data,function(d) {
+  return d.Country;
+}).keys();
+
+  // draw legend
+  var legend = svg.selectAll(".legend")
+      .data(color.domain())
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 25 + ")"; });
+
+  // draw legend colored rectangles
+  legend.append("rect")
+      .attr("x", width+ 60)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", function(d) {return color(d)});
+
+  // draw legend text
+  legend.append("text")
+      .attr("x", width + 80)
+      .attr("y", +9)
+      .attr("dy", ".1em")
+      .style("text-anchor", "start")
+      .text(function(d, i) { return countryNames[i]; });
+
+}
+
+function redraw(dataset, method) {
+
+  var layers;
+
+  if (method == "stacked") {
+    layers = stack(dataset); // this operation also modifies the dataset
+  } else {
+    layers = stream(dataset); // this operation also modifies the dataset
+  }
+
+  console.log("layers", layers);  // it adds a y and y0 to the data values.
+
+  // reset these AFTER doing the layer stacking.
+
+  xScale.domain(d3.extent(originaldata, function(d) { return formatDate.parse(d.Year); }));
+  yScale.domain([0, d3.max(originaldata, function(d) { return d.y0 + d.y; })]);
+
+
+  var layers = svg.selectAll(".layer")
+      .data(layers, function(d) {return d.key;});
+
+  layers.enter().append("path")
+      .attr("class", "layer")
+      .append("title")
+      .text(function(d) {
+        return d.key; // country is the key
+      });
+
+  layers.transition().duration(1000)
+    .attr("d", function(d) { return area(d.values); })
+    .style("fill", function(d, i) { return color(i); });
+
+  layers.exit().remove();
+
+  // transition your axes.
+  d3.select(".x.axis").transition().call(xAxis);
+  d3.select(".y.axis").transition().call(yAxis); // there is no visible change actually
+
+}
+})();
+
+</script>
+
+ <h1>Terrorism Incidents by Region, 2000-2014</h1>
+
+ <p>The number of terrorist incidents in <b>South and Southeast Asia and the Middle East and North Africa</b> have been on a steady climb since the early 2000s due to groups such as The Kurdistan Workers' Party (PKK) and Dev Sol in <b>Turkey</b>, Al Qaeda cells in <b>Pakistan</b>, the Armed Islamic Group in <b>Algeria</b>, Islamic Extremists, Left wing extremists and communist insurgents in <b>India</b>, Al Qaeda cells and ISIL in <b>Iraq</b> and Boko Haram in <b>Nigeria</b>.</p>
+
+ <p>Meanwhile, Eastern Europe has seen a spike of terrorist incidents due to the unrest in <b>Ukraine</b> by groups such as the Donetsk People's Republic</p>
+
+<script>
+
+(function() {
+
+var smallfullheight = 160,
+  smallfullwidth = 300;
+
+var smallmargin = {top: 30, right: 15, bottom: 20, left: 45},
+    width = smallfullwidth - smallmargin.left - smallmargin.right,
+    height = smallfullheight - smallmargin.top - smallmargin.bottom;
+
+var parseDate = d3.time.format("%Y").parse;
+var outputDate = d3.time.format("%Y");
+var smallxScale = d3.time.scale().range([0, width]).clamp(true);
+var smallyScale = d3.scale.linear().range([height, 0]).clamp(true);
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var smallyAxis = d3.svg.axis()
+      .orient("left")
+      .ticks(4)
+      .outerTickSize(0)
+      .innerTickSize(0)
+      .tickFormat(d3.format("s"));
+
+var incident = "Incidents";  // pick the one from the columns to plot
+
+var data = [],
+  circle = null,
+  caption = null,
+  curYear = null;
+
+  var smallxValue = function(d) {
+    return d.date;
+  };
+  var smallyValue = function(d) {
+    return d.count;
+  };
+
+var smallarea = d3.svg.area().x(function(d) {
+    return smallxScale(smallxValue(d));
+      }).y0(height).y1(function(d) {
+      return smallyScale(smallyValue(d));
+    });
+  var smallline = d3.svg.line().x(function(d) {
+      return smallxScale(smallxValue(d));
+    }).y(function(d) {
+      return smallyScale(smallyValue(d));
+  });
+
+
+var smallarea = d3.svg.area()
+    .x(function(d) { return x(d.date); })
+    .y0(height)
+    .y1(function(d) { return y(d[incident]); });
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d[incident]); });
+
+d3.csv("data/small-terrorism-00s.csv", typeFix, function(error, data) {
+
+  //typeFix is a function that parses the dates and sets the strings to numeric. See below!
+  console.log("data after load", data);
+
+  // Nest data by symbol.
+  var smallCountries = d3.nest()
+      .key(function(d) { return d.Region; })
+      .sortKeys(d3.ascending)
+      .sortValues(function(a,b) {return a.date - b.date;})
+      .entries(data);
+
+  console.log(smallCountries);
+
+  // sort by worst ending incident value!  Incidents is a variable here, remember:
+  smallCountries.sort(function(a,b) { return b.values[12][incident] - a.values[12][incident]; });
+
+  // Compute the minimum and maximum date across symbols.
+  // We assume values are sorted by date.
+  x.domain([
+    d3.min(smallCountries, function(s) { return s.values[0].date; }),
+    d3.max(smallCountries, function(s) { return s.values[s.values.length - 1].date; })
+  ]);
+
+  // Add an SVG element for each symbol, with the desired dimensions and margin:
+  var svg = d3.select("body").selectAll("svg")
+      .data(smallCountries) // the data for each graph
+    .enter().append("svg")
+      .attr("width", smallfullwidth)
+      .attr("height", smallfullheight)
+    .append("g")
+      .attr("transform", "translate(" + smallmargin.left + "," + smallmargin.top + ")")
+      .each(multiple); // uses each to call the multiple code for each country
+
+  function multiple(country) {
+
+    console.log("in multiple", country);
+
+    var localsvg = d3.select(this);
+    y.domain([0, d3.max(country.values, function(d) { return d[incident]; })]);
+
+    // Add the area path elements. Note: the y-domain is set per element.
+    localsvg.append("path")
+        .attr("class", "area")
+        .attr("d", function(d) { return smallarea(d.values); });
+
+    // Add the line path elements. Note: the y-domain is set per element.
+    localsvg.append("path")
+        .attr("class", "line")
+        .attr("d", function(d) { return smallline(d.values); });
+
+    localsvg.append("text")
+      .attr("class", "label")
+      .attr("x", 0)
+      .attr("y", height + smallmargin.bottom/2)
+      .style("text-anchor", "start")
+      .text(function(d) { return outputDate(d.values[0].date); });
+
+    // Add a small label for the symbol name.
+
+    localsvg.append("text")
+      .attr("class", "label")
+      .attr("x", width/2)
+      .attr("y", -10)
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.key; });
+
+    localsvg.append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", height + smallmargin.bottom/2)
+      .style("text-anchor", "end")
+      .text(function(d) { return outputDate(d.values[d.values.length - 1].date);});
+
+      // put a dot on last point
+      localsvg.append("circle")
+      .attr("class", "endpoint")
+      .attr("cx", function(d) {return x(d.values[d.values.length - 1].date);})
+      .attr("cy", function(d) {return y(d.values[d.values.length - 1][incident]);})
+      .attr("r", 2);
+
+      // label the value on the last point
+    localsvg.append("text")
+     .attr("class", "endpoint")
+      .attr("x", width)
+      .attr("y", function(d) {return y(d.values[d.values.length - 1][incident]);})
+      .attr("dy", -5)
+      .style("text-anchor", "end")
+      .text(function(d) { return d.values[d.values.length - 1][incident]; });
+
+    smallyAxis.scale(y);
+
+    localsvg.append("g").attr("class", "y axis").call(smallyAxis);
+
+  } // end of the multiple function
+
+});
+
+  // this function is applied to all the data values on load!
+
+function typeFix(d) {
+  d.Incidents = +d.Incidents;
+  d.date = parseDate(d.Year);
+  return d;
+}
+
+}) ();
+</script>
