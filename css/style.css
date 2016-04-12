@@ -1,0 +1,49 @@
+body {
+  font: 11px sans-serif;
+  margin: 20px;
+  padding: 20px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #999999;
+  stroke-width: 1.5px;
+}
+
+.area {
+  fill: #dedede;
+}
+
+button {
+  background: #ccc;
+  margin: 5px;
+
+}
+.selected {
+  background: orange;
+}
+
+.layer {
+  fill: white;
+}
+
+.label {
+  fill: steelblue;
+  font-weight:bold;
+  z-index: 4;
+}
+
+.endpoint {
+  fill: #666;
+}
+
+.y.axis text {
+  fill: steelblue;
+}
