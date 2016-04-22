@@ -30,6 +30,34 @@ button {
   background: orange;
 }
 
+path.line {
+  fill: none;
+  stroke: #cccccc;
+  stroke-width: 3px;
+  stroke-opacity: 50%;
+}
+
+.focused {
+  stroke: black;
+  stroke-width: 5px;
+  stroke-opacity: 100%;
+}
+
+.unfocused {
+  stroke: gray;
+  opacity: .5;
+  stroke-width: 1px;
+}
+
+
+text.hidden {
+  display: none;
+}
+
+text.bolder {
+  font-weight: bolder;
+}
+
 .layer {
   fill: white;
 }
@@ -40,10 +68,27 @@ button {
   z-index: 4;
 }
 
+text.linelabel {
+  font-size: 9pt;
+  color: gray;
+}
+
 .endpoint {
   fill: #666;
 }
 
 .y.axis text {
   fill: #000000;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 10;
+}
+
+.tooltip p {
+  background-color: white;
+  border: gray 1px solid;
+  padding: 2px;
+  max-width: 180px;
 }
