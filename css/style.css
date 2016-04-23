@@ -1,13 +1,44 @@
 body {
-  font: 11px sans-serif;
+  font: 11px;
   margin: 20px;
-  padding: 20px;
+}
+
+h1{
+  font-family: 'Bree Serif', serif;
+  font-size: 72px;
+}
+
+h2 {
+  font-family: 'Bree Serif', serif;
+  font-size: 42px;
+}
+
+
+p.intro {
+  font-family: 'Bree Serif', serif;
+  font-size: 18px;
+}
+
+p.caption {
+  font-family: 'Bree Serif', serif;
+  font-size: 14px;
+}
+
+.wrap{
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px;
+  position: relative;
+}
+
+.btnrow {
+  padding-bottom: 10px;
 }
 
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: #1E1E20;
   shape-rendering: crispEdges;
 }
 
@@ -21,29 +52,19 @@ body {
   fill: #dedede;
 }
 
-button {
-  background: #ccc;
-  margin: 5px;
-
-}
-.selected {
-  background: orange;
-}
-
 path.line {
   fill: none;
-  stroke: #cccccc;
   stroke-width: 3px;
   stroke-opacity: 50%;
 }
 
-.focused {
-  stroke: black;
+#focused {
+  stroke: #FF5335;
   stroke-width: 5px;
   stroke-opacity: 100%;
 }
 
-.unfocused {
+#unfocused {
   stroke: gray;
   opacity: .5;
   stroke-width: 1px;
@@ -78,15 +99,21 @@ text.linelabel {
 }
 
 .y.axis text {
-  fill: #000000;
+  fill: #1E1E20;
+  font-size: 11px;
 }
 
-.tooltip {
+.x.axis text {
+  fill: #1E1E20;
+  font-size: 11px;
+}
+
+.linetooltip {
   position: absolute;
   z-index: 10;
 }
 
-.tooltip p {
+.linetooltip p {
   background-color: white;
   border: gray 1px solid;
   padding: 2px;

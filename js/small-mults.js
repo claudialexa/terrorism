@@ -7,17 +7,17 @@
 			console.log("error reading file");
 		}
 
-	// BEGIN: MAKECHART1 FUNCTION. ALL UNIVERSAL VARIABLES
+	// BEGIN: MAKECHART2 FUNCTION. ALL UNIVERSAL VARIABLES
 
-	function makeChart1() {
+	function makeChart2() {
 
-	var fullwidth = 800;
-	var fullheight = 600;
+	var fullheight = 160,
+  		fullwidth = 300;
 
-	var chart1margin = {top: 20, right: 100, bottom: 20, left: 100};
+	var chart2margin = {top: 20, right: 100, bottom: 20, left: 100};
 
-	var width = fullwidth- chart1margin.left - chart1margin.right,
-		height = fullheight - chart1margin.top - chart1margin.bottom;
+	var width = fullwidth- chart2margin.left - chart2margin.right,
+		height = fullheight - chart2margin.top - chart2margin.bottom;
 
 	var xScale = d3.time.scale().range([0, width]);
 	var yScale = d3.scale.linear()
@@ -43,12 +43,12 @@
 			return yScale(d.values.incidents);
 		});
 
-	var chart1 = d3.select("#chart1")
+	var chart1 = d3.select("#chart2")
 		.append("svg")
 		.attr("width", fullwidth)
 		.attr("height", fullheight)
 		.append("g")
-		.attr("transform", "translate(" + chart1margin.left + "," + chart1margin.top + ")");
+		.attr("transform", "translate(" + chart2margin.left + "," + chart2margin.top + ")");
 
 	var tooltip = d3.select("body")
   	.append("div")
@@ -59,25 +59,19 @@
 
 	//CURRENT DATA//
 
-	var countryData = makeCountryData(data);
-	drawGraph(countryData);
-
-	console.log(countryData);
+	var regionData = makeRegionData(data);
+	drawGraph(regionData);
 
 	//BEGIN: BUTTONS
 
 	d3.select("button#groups").on("click", function() {
 		var groupData = makeGroupData(data);
 		drawGraph(groupData);
-
-		d3.select("p.story").text("Groups Story");
 	});
 
 	d3.select("button#countries").on("click", function() {
 		var groupData = makeCountryData(data);
 		drawGraph(countryData);
-
-		d3.select("p.story").text("Countries Story");
 	});
 
 	d3.select("button#seventy").on("click", function() {
@@ -165,8 +159,6 @@
 
 		circles.exit().remove();
 
-	d3.select("p.story").text("Countries Story");
-
 	d3.selection.prototype.moveToFront = function() {
 	      return this.each(function(){
 	        this.parentNode.appendChild(this);
@@ -230,10 +222,10 @@
 
 	// END: AXES - They are the same for all 
 
-	  function makeCountryData(data) {
+	  function makeRegionData(data) {
 
-		  var countryByYear = d3.nest()
-	     .key(function(d) { return d.country_txt; })
+		 var regionByYear = d3.nest()
+	     .key(function(d) { return d.region_txt; })
 	     .sortKeys(d3.ascending)
 	     .key(function(d) {return d.iyear;})
 	     .sortKeys(function(a,b) {
@@ -242,12 +234,12 @@
 	     .rollup(function(leaves) { 
 	     		return { "incidents": leaves.length, 
 	     		"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
-	     		"country" : leaves[0].country_txt
+	     		"region" : leaves[0].region_txt
 	          };
 	      })
 	      .entries(data);
 
-	    console.log(countryByYear)
+	    console.log(regionByYear)
 
 		var totalIncidents = d3.nest()
 		  .key(function(d) { return d.country_txt; })
@@ -284,17 +276,6 @@
 		return topCountriesForLine;
 		}
 
-		// HOW CAN I MAKE A RESCALE OF THE XSCALE WORK TO REDRAW THE DOMAIN BY DECADES? THANK YOU!!!
-
-		function rescale70s() {
-            xScale.domain([1970, 1979])
-            chart1.select("x axis")
-                    .transition().duration(1500).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
-                    .call(xAxis);  
-            // vis.select(".x.axis text")
-            //     .text("Rescaled Axis");
-        }
-
 		function top50(totals) {
         return totals.sort(function (a, b) {
             return d3.descending(a.values, b.values);
@@ -306,70 +287,9 @@
   			.range(["#000000", "#g5g5g5", ]);
     	}
 
-
-		function makeGroupData(data) {
-
-			var groupByYear = d3.nest()
-	     .key(function(d) { return d.gname; })
-	     .sortKeys(d3.ascending)
-	     .key(function(d) {return d.iyear;})
-	     .sortKeys(function(a,b) {
-	     	return d3.ascending(yearFormat.parse(a), yearFormat.parse(b));
-	     })
-	     .rollup(function(leaves) { return { 
-	     	"incidents": leaves.length, 
-	     	"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
-	     	"group": leaves[0].gname
-	          };
-	      })
-	     .entries(data);
-
-	     console.log(groupByYear);
-
-		var totalGroupIncidents = d3.nest()
-		  .key(function(d) { return d.gname; })
-		  // .key(function(d) { return d.iyear; })
-		  .rollup(function(v) { return v.length; })
-		  .entries(data);
-
-	  console.log(totalGroupIncidents);
-
-    var topIncidents = top50(totalGroupIncidents);
-    console.log(topIncidents);
-
-   	var topGroupsByIncidentsNames = topIncidents.map(function (d) {return d.key;}); // country names
-
-		var topGroupsForLine = groupByYear.filter(function(d) {
-			return topGroupsByIncidentsNames.indexOf(d.key) !== -1;
-		});
-
-		// structure is key: country, { key: year, values: deaths incident}
-
-		var valuesForXScale = d3.merge(topGroupsForLine.map(function(d) {return d.values;}));
-		var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
-
-		xScale.domain(
-			d3.extent(valuesForXScale, function(d) {
-				return yearFormat.parse(d.key);
-			}));
-
-
-		yScale.domain([
-			d3.max(valuesForYScale, function(d) {
-					return d.incidents;
-			}),
-			0
-			]);
-
-		d3.select("p.story").html("Group Text"); // HOW TO APPEND STORY?
-
-		return topGroupsForLine;
-
-		}
-
 	}
 
-	makeChart1();
+	makeChart2();
 
 
 	}); // end of data csv
