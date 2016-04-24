@@ -36,8 +36,7 @@
 		.innerTickSize([0]);
 
 	var line = d3.svg.line()
-		.x(function (d) {
-			return xScale(yearFormat.parse(d.key));
+		.x(function (d) { return xScale(yearFormat.parse(d.key));
 		})
 		.y(function (d) {
 			return yScale(d.values.incidents);
@@ -54,7 +53,6 @@
   	.append("div")
   	.attr("class", "linetooltip");
 
-
   	// END: MAKECHART1 FUNCTION. ALL UNIVERSAL VARIABLES
 
 	//CURRENT DATA//
@@ -62,7 +60,7 @@
 	var countryData = makeCountryData(data);
 	drawGraph(countryData);
 
-	console.log(countryData);
+	// console.log(countryData);
 
 	//BEGIN: BUTTONS
 
@@ -247,7 +245,7 @@
 	      })
 	      .entries(data);
 
-	    console.log(countryByYear)
+	    // console.log(countryByYear) //COUNTRY BY YEAR
 
 		var totalIncidents = d3.nest()
 		  .key(function(d) { return d.country_txt; })
@@ -265,9 +263,11 @@
 
    	var topCountriesByIncidentsNames = topIncidents.map(function (d) {return d.key;}); // country names
 
-		var topCountriesForLine = countryByYear.filter(function(d) {
-			return topCountriesByIncidentsNames.indexOf(d.key) !== -1;
-		});
+	var topCountriesForLine = countryByYear.filter(function(d) {
+		return topCountriesByIncidentsNames.indexOf(d.key) !== -1;
+	});
+
+		// console.log(topCountriesForLine)
 
 		// structure is key: country, { key: year, values: deaths incident}
 
@@ -299,13 +299,12 @@
         return totals.sort(function (a, b) {
             return d3.descending(a.values, b.values);
         }).slice(0,100);
+        }
 
         // TESTING COLORS
         var color = d3.scale.ordinal()
   			.domain(["Afghanistan", "Iraq"])
   			.range(["#000000", "#g5g5g5", ]);
-    	}
-
 
 		function makeGroupData(data) {
 
@@ -324,7 +323,7 @@
 	      })
 	     .entries(data);
 
-	     console.log(groupByYear);
+	     // console.log(groupByYear);
 
 		var totalGroupIncidents = d3.nest()
 		  .key(function(d) { return d.gname; })
@@ -332,10 +331,10 @@
 		  .rollup(function(v) { return v.length; })
 		  .entries(data);
 
-	  console.log(totalGroupIncidents);
+	  // console.log(totalGroupIncidents);
 
     var topIncidents = top50(totalGroupIncidents);
-    console.log(topIncidents);
+    // console.log(topIncidents);
 
    	var topGroupsByIncidentsNames = topIncidents.map(function (d) {return d.key;}); // country names
 

@@ -1,295 +1,145 @@
 
-	d3.csv("data/terrorism-clean-data.csv", function (error, data) {
 
-		var yearFormat = d3.time.format("%Y");
+	var yearFormat = d3.time.format("%Y");
 
-		if (error) {
-			console.log("error reading file");
-		}
+	// BEGIN: MAKEchart2 FUNCTION. ALL UNIVERSAL VARIABLES
 
-	// BEGIN: MAKECHART2 FUNCTION. ALL UNIVERSAL VARIABLES
+	function makechart2() {
 
-	function makeChart2() {
+	var margin = {top: 8, right: 10, bottom: 2, left: 10},
+    width = 200 - margin.left - margin.right,
+    height = 150 - margin.top - margin.bottom;
 
-	var fullheight = 160,
-  		fullwidth = 300;
+    var x = d3.time.scale()
+    .range([0, width]);
 
-	var chart2margin = {top: 20, right: 100, bottom: 20, left: 100};
-
-	var width = fullwidth- chart2margin.left - chart2margin.right,
-		height = fullheight - chart2margin.top - chart2margin.bottom;
-
-	var xScale = d3.time.scale().range([0, width]);
-	var yScale = d3.scale.linear()
-				.range([0, height])
-
-	var xAxis = d3.svg.axis()
-		.scale(xScale)
-		.orient("bottom")
-		.ticks(15)
-		.innerTickSize([0]);
+	var y = d3.scale.linear()
+    .range([height, 0]);
 
 	var yAxis = d3.svg.axis()
-		.scale(yScale)
 		.orient("left")
-		.ticks(15)
+		.ticks(5)
 		.innerTickSize([0]);
 
+	var area = d3.svg.area()
+    .x(function(d) { return x(d.key); })
+    .y0(height)
+    .y1(function(d) { return y(d.values.incidents); });
+
 	var line = d3.svg.line()
-		.x(function (d) {
-			return xScale(yearFormat.parse(d.key));
-		})
-		.y(function (d) {
-			return yScale(d.values.incidents);
-		});
+    .x(function(d) { return x(d.key); })
+    .y(function(d) { return y(d.values.incidents); });
 
-	var chart1 = d3.select("#chart2")
-		.append("svg")
-		.attr("width", fullwidth)
-		.attr("height", fullheight)
-		.append("g")
-		.attr("transform", "translate(" + chart2margin.left + "," + chart2margin.top + ")");
-
-	var tooltip = d3.select("body")
-  	.append("div")
-  	.attr("class", "linetooltip");
-
-
-  	// END: MAKECHART1 FUNCTION. ALL UNIVERSAL VARIABLES
-
-	//CURRENT DATA//
-
+	//BEGIN: CALL CURRENT DATA//
 	var regionData = makeRegionData(data);
 	drawGraph(regionData);
+	//END: CALL CURRENT DATA//
 
 	//BEGIN: BUTTONS
 
-	d3.select("button#groups").on("click", function() {
-		var groupData = makeGroupData(data);
-		drawGraph(groupData);
-	});
+	d3.select("button#asia").on("click", function() {
+		var groupData = makeRegionDataAsia(data);
+		drawGraph(RegionDataAsia);
 
-	d3.select("button#countries").on("click", function() {
-		var groupData = makeCountryData(data);
-		drawGraph(countryData);
-	});
-
-	d3.select("button#seventy").on("click", function() {
-		var groupData = makeCountryData(data);
-		drawGraph(countryData);
-		rescale70s(); 
+		d3.select("p.story").text("Asia Story");
 	});
 
 	//END: BUTTONS
 
-	//BEGIN: DRAWGRAPH FUNCTION
-
-	function drawGraph(data) {
-
-		var groups = chart1.selectAll("g.lines")
-			.data(data);
-
-		groups
-			.enter()
-			.append("g")
-			.attr("class", "lines")
-			// .style("stroke", function (d) {
-			// 	return color(d.values); }) GETTING COLORS TO WORK WITH DIFFERENT KEYS
-			.style("stroke", "gray")
-			.on("mouseover", mouseoverFunc)
-			.on("mousemove", mousemoveFunc)
-			.on("mouseout",	mouseoutFunc);
-
-		// QUESTION: HOW DO I GET LAST VALUE OF EACH LINE TO APPEND LABELS (for country and terrorist incidents?
-		groups.append("text")
-			.datum(function(d) {
-				var lastx = d.values[d.values.length-1] // how can I access the key which is the last year? the last incident for the last year is in here how can I get it out?
-				// var lasty = d.incidents.length-1]
-				// console.log(d.key, lastx, lasty);
-			})
-
-		groups.exit()
-			.remove();
-
-		var lines = groups.selectAll("path")
-			.data(function(d) {
-				return [ d.values ];
-			})
-			.attr("x", 3)
-	      	.attr("dy", 3)
-	      	.text(function(d) {
-	      		return d.country;
-	      	})
-	      	.classed("linelabel", true);
-
-			lines
-			.enter()
-			.append("path")
-			.attr("class", "line")
-			.on("mouseover", mouseoverFunc)
-			.on("mousemove", mousemoveFunc)
-			.on("mouseout",	mouseoutFunc);
-			
-
-			lines.transition()
-			.duration(1000)
-			.attr("d", line); 
-
-
-			lines.exit().remove();
-
-		var circles = groups.selectAll("circle")
-			.data(function(d) {
-				return d.values;
-			});
-
-			circles
-			.enter()
-			.append("circle");
-
-			circles.transition()
-			.attr("cx", function(d) {
-				return xScale(yearFormat.parse(d.key));
-			})
-			.attr("cy", function(d) {
-				return yScale(+d.values.incidents);
-			})
-			.duration(2000)
-			.attr("r", 0);
-
-		circles.exit().remove();
-
-	d3.selection.prototype.moveToFront = function() {
-	      return this.each(function(){
-	        this.parentNode.appendChild(this);
-	    	});
-	}
-
 	function mouseoverFunc(d) {
-		d3.select(this)
-			.transition()
-			.style("opacity", 1)
-			.attr("stroke", 10);
-		tooltip
-			.style("display", null) // this removes the display none setting from it
-			.html("<p>" + d.key + "</p>");
-
-		d3.select(this).select("path").attr("id", "focused");
-		d3.select(this).select("text").classed("hidden", false);  // show it if "hidden"
-		d3.select(this).select("text").classed("bolder", true);
-		d3.select(this).moveToFront();
-		}
+	}
 
 	
 	function mousemoveFunc(d) {
-		tooltip
-			.style("top", (d3.event.pageY - 10) + "px" )
-			.style("left", (d3.event.pageX + 10) + "px");
-		}
+	}
 
 
 	function mouseoutFunc(d) {
-		d3.select(this)
-			.transition()
-			.style("opacity", 1)
-			.attr("r", 3);
-    	tooltip.style("display", "none");  // this sets it to invisible!
-
-    	d3.select(this).select("path").attr("id", null); 
-     }
-
-
-  } 
- 	//END: DRAWGRAPH FUNCTION
-
-  	//BEGIN: AXES - They are the same for all 
-
-	chart1.append("g")
-			.attr("class", "x axis")
-			.attr("transform", "translate(0," + height + ")")
-			.call(xAxis);
-
-	chart1.append("g")
-			.attr("class", "y axis")
-			.call(yAxis);
-
-	chart1.append("text")
-			.attr("class", "ylabel")
-			.attr("transform","rotate(-90) translate(" + (-height/2) + ",0)")
-			.style("text-anchor", "middle")
-			.attr("dy", -80)
-			.text("Incidents");
-
-	// END: AXES - They are the same for all 
-
-	  function makeRegionData(data) {
-
-		 var regionByYear = d3.nest()
-	     .key(function(d) { return d.region_txt; })
-	     .sortKeys(d3.ascending)
-	     .key(function(d) {return d.iyear;})
-	     .sortKeys(function(a,b) {
-	     	return d3.ascending(yearFormat.parse(a), yearFormat.parse(b));
-	     })
-	     .rollup(function(leaves) { 
-	     		return { "incidents": leaves.length, 
-	     		"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
-	     		"region" : leaves[0].region_txt
-	          };
-	      })
-	      .entries(data);
-
-	    console.log(regionByYear)
-
-		var totalIncidents = d3.nest()
-		  .key(function(d) { return d.country_txt; })
-		  .rollup(function(v) { return v.length; })
-		  .entries(data);
-
-
-    function top50countries(totalIncidents) {
-        return totalIncidents.sort(function (a, b) {
-            return d3.descending(a.values, b.values);
-        }).slice(0,100);
-    }
-
-    var topIncidents = top50(totalIncidents);
-
-   	var topCountriesByIncidentsNames = topIncidents.map(function (d) {return d.key;}); // country names
-
-		var topCountriesForLine = countryByYear.filter(function(d) {
-			return topCountriesByIncidentsNames.indexOf(d.key) !== -1;
-		});
-
-		// structure is key: country, { key: year, values: deaths incident}
-
-		var valuesForXScale = d3.merge(topCountriesForLine.map(function(d) {return d.values;}));
-		var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
-
-		xScale.domain(
-			d3.extent(valuesForXScale, function(d) {
-				return yearFormat.parse(d.key);
-			}));
-
-		yScale.domain([1500,0]);
-
-		return topCountriesForLine;
-		}
-
-		function top50(totals) {
-        return totals.sort(function (a, b) {
-            return d3.descending(a.values, b.values);
-        }).slice(0,100);
-
-        // TESTING COLORS
-        var color = d3.scale.ordinal()
-  			.domain(["Afghanistan", "Iraq"])
-  			.range(["#000000", "#g5g5g5", ]);
-    	}
-
 	}
 
-	makeChart2();
+	function makeRegionData(data) {
 
+	 var regionByYear = d3.nest()
+     .key(function(d) { return d.region_txt; })
+     .sortKeys(d3.ascending)
+     .key(function(d) {return d.iyear;})
+     .sortKeys(function(a,b) {
+     	return d3.ascending(yearFormat.parse(a), yearFormat.parse(b));
+     })
+     .rollup(function(leaves) { 
+     		return { 
+     		"incidents": leaves.length, 
+     		"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
+     		"region" : leaves[0].region_txt
+          };
+      })
+      .entries(data);
 
-	}); // end of data csv
+	var totalRegionIncidents = d3.nest()
+	.key(function(d) { return d.region_txt; })
+	.rollup(function(v) { return v.length; })
+	.entries(data);
+
+	function top50regions(totalRegionIncidents) {
+	    return totalRegionIncidents.sort(function (a, b) {
+	        return d3.descending(a.values, b.values);
+	    });
+	}
+
+		  function top50(totals) {
+		    return totals.sort(function (a, b) {
+		        return d3.descending(a.values, b.values);
+		    });
+		    }
+
+		  var topRegionIncidents = top50(totalRegionIncidents);
+
+		  var topRegionsByIncidentsNames = topRegionIncidents.map(function (d) {return d.key;}); // region names
+		  var topRegionsForLine = regionByYear.filter(function(d) {
+				return topRegionsByIncidentsNames.indexOf(d.key) !== -1;
+			});
+
+		  console.log(topRegionsForLine)
+
+		  var valuesForXScale = d3.merge(topRegionsForLine.map(function(d) {return d.values;}));
+		  var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
+
+		  return topRegionsForLine;
+
+		  console.log(topRegionsforLine)
+
+    }
+
+    function drawGraph(regionByYear) {
+
+    	regionByYear.forEach(function(d) {
+    		d.maxIncidents = d3.min(d.values, function(d) { return +d.values.incidents; });
+		  });
+
+		x.domain([
+		d3.min(regionByYear, function(d) { return d.key; }),
+		d3.max(regionByYear, function(d) { return d.key; })
+		]);
+
+		var chart2 = d3.select("#chart2")
+	      .data(regionByYear)
+	      .enter().append("svg")
+	      .attr("width", width + margin.left + margin.right)
+	      .attr("height", height + margin.top + margin.bottom)
+	      .append("g")
+	      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	    chart2.append("path")
+      	.attr("class", "area")
+      	.attr("d", function(d) { y.domain([0, d.maxIncidents]); return area(+d.values.incidents); });
+
+      	chart2.append("path")
+      	.attr("class", "line")
+      	.attr("d", function(d) { y.domain([0, d.maxIncidents]); return line(+d.values.incidents); });
+
+    }
+
+} //END: MAKECHART2
+
+	makechart2();
+
