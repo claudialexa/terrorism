@@ -1,6 +1,11 @@
 
+	d3.csv("data/terrorism-clean-data.csv", function (error, data) {
 
-	var yearFormat = d3.time.format("%Y");
+		var yearFormat = d3.time.format("%Y");
+
+		if (error) {
+			console.log("error reading file");
+		}
 
 	// BEGIN: MAKEchart2 FUNCTION. ALL UNIVERSAL VARIABLES
 
@@ -142,4 +147,6 @@
 } //END: MAKECHART2
 
 	makechart2();
+
+}); // end of data csv
 

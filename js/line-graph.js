@@ -14,6 +14,8 @@
 	var fullwidth = 800;
 	var fullheight = 600;
 
+	var color = d3.scale.category10();
+
 	var chart1margin = {top: 20, right: 100, bottom: 20, left: 100};
 
 	var width = fullwidth- chart1margin.left - chart1margin.right,
@@ -90,6 +92,8 @@
 
 	function drawGraph(data) {
 
+		var color = d3.scale.category10();
+
 		var groups = chart1.selectAll("g.lines")
 			.data(data);
 
@@ -97,9 +101,7 @@
 			.enter()
 			.append("g")
 			.attr("class", "lines")
-			// .style("stroke", function (d) {
-			// 	return color(d.values); }) GETTING COLORS TO WORK WITH DIFFERENT KEYS
-			.style("stroke", "gray")
+			// .style("stroke", "gray")
 			.on("mouseover", mouseoverFunc)
 			.on("mousemove", mousemoveFunc)
 			.on("mouseout",	mouseoutFunc);
@@ -129,6 +131,9 @@
 			lines
 			.enter()
 			.append("path")
+			.style("stroke", function (d) {
+				return color;
+			})
 			.attr("class", "line")
 			.on("mouseover", mouseoverFunc)
 			.on("mousemove", mousemoveFunc)
@@ -141,6 +146,7 @@
 
 
 			lines.exit().remove();
+
 
 		var circles = groups.selectAll("circle")
 			.data(function(d) {
@@ -300,11 +306,6 @@
             return d3.descending(a.values, b.values);
         }).slice(0,100);
         }
-
-        // TESTING COLORS
-        var color = d3.scale.ordinal()
-  			.domain(["Afghanistan", "Iraq"])
-  			.range(["#000000", "#g5g5g5", ]);
 
 		function makeGroupData(data) {
 
