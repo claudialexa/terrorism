@@ -7,8 +7,6 @@
 			console.log("error reading file");
 		}
 
-	// BEGIN: MAKECHART1 FUNCTION. ALL UNIVERSAL VARIABLES
-
 	function makeChart1() {
 
 	var fullwidth = 800;
@@ -55,14 +53,12 @@
   	.append("div")
   	.attr("class", "linetooltip");
 
-  	// END: MAKECHART1 FUNCTION. ALL UNIVERSAL VARIABLES
-
 	//CURRENT DATA//
 
 	var countryData = makeCountryData(data);
 	drawGraph(countryData);
 
-	// console.log(countryData);
+	console.log(countryData);
 
 	//BEGIN: BUTTONS
 
@@ -164,55 +160,55 @@
 			.attr("cy", function(d) {
 				return yScale(+d.values.incidents);
 			})
+			// .style("fill", function (d) {
+			// 	return color(d.values.incidents);
+			// })
 			.duration(2000)
 			.attr("r", 0);
 
 		circles.exit().remove();
 
-	d3.select("p.story").text("Countries Story");
+		d3.select("p.story").text("Countries Story");
 
-	d3.selection.prototype.moveToFront = function() {
-	      return this.each(function(){
-	        this.parentNode.appendChild(this);
-	    	});
-	}
-
-	function mouseoverFunc(d) {
-		d3.select(this)
-			.transition()
-			.style("opacity", 1)
-			.attr("stroke", 10);
-		tooltip
-			.style("display", null) // this removes the display none setting from it
-			.html("<p>" + d.key + "</p>");
-
-		d3.select(this).select("path").attr("id", "focused");
-		d3.select(this).select("text").classed("hidden", false);  // show it if "hidden"
-		d3.select(this).select("text").classed("bolder", true);
-		d3.select(this).moveToFront();
+		d3.selection.prototype.moveToFront = function() {
+		      return this.each(function(){
+		        this.parentNode.appendChild(this);
+		    	});
 		}
 
-	
-	function mousemoveFunc(d) {
-		tooltip
-			.style("top", (d3.event.pageY - 10) + "px" )
-			.style("left", (d3.event.pageX + 10) + "px");
-		}
+		function mouseoverFunc(d) {
+			d3.select(this)
+				.transition()
+				.style("opacity", 1)
+				.attr("stroke", 10);
+			tooltip
+				.style("display", null) // this removes the display none setting from it
+				.html("<p>" + d.key + "</p>");
+
+			d3.select(this).select("path").attr("id", "focused");
+			d3.select(this).select("text").classed("hidden", false);  // show it if "hidden"
+			d3.select(this).select("text").classed("bolder", true);
+			d3.select(this).moveToFront();
+			}
+
+		function mousemoveFunc(d) {
+			tooltip
+				.style("top", (d3.event.pageY - 10) + "px" )
+				.style("left", (d3.event.pageX + 10) + "px");
+			}
+
+		function mouseoutFunc(d) {
+			d3.select(this)
+				.transition()
+				.style("opacity", 1)
+				.attr("r", 3);
+	    	tooltip.style("display", "none");  // this sets it to invisible!
+
+	    	d3.select(this).select("path").attr("id", null); 
+	     }
 
 
-	function mouseoutFunc(d) {
-		d3.select(this)
-			.transition()
-			.style("opacity", 1)
-			.attr("r", 3);
-    	tooltip.style("display", "none");  // this sets it to invisible!
-
-    	d3.select(this).select("path").attr("id", null); 
-     }
-
-
-  } 
- 	//END: DRAWGRAPH FUNCTION
+  	} //END: DRAWGRAPH FUNCTION
 
   	//BEGIN: AXES - They are the same for all 
 
@@ -234,30 +230,27 @@
 
 	// END: AXES - They are the same for all 
 
-	  function makeCountryData(data) {
+  	function makeCountryData(data) {
 
-		  var countryByYear = d3.nest()
-	     .key(function(d) { return d.country_txt; })
-	     .sortKeys(d3.ascending)
-	     .key(function(d) {return d.iyear;})
-	     .sortKeys(function(a,b) {
-	     	return d3.ascending(yearFormat.parse(a), yearFormat.parse(b));
-	     })
-	     .rollup(function(leaves) { 
-	     		return { "incidents": leaves.length, 
-	     		"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
-	     		"country" : leaves[0].country_txt
-	          };
-	      })
-	      .entries(data);
+	  var countryByYear = d3.nest()
+     .key(function(d) { return d.country_txt; })
+     .sortKeys(d3.ascending)
+     .key(function(d) {return d.iyear;})
+     .sortKeys(function(a,b) {
+     	return d3.ascending(yearFormat.parse(a), yearFormat.parse(b));
+     })
+     .rollup(function(leaves) { 
+     		return { "incidents": leaves.length, 
+     		"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
+     		"country" : leaves[0].country_txt
+          };
+      })
+      .entries(data);
 
-	    // console.log(countryByYear) //COUNTRY BY YEAR
-
-		var totalIncidents = d3.nest()
-		  .key(function(d) { return d.country_txt; })
-		  .rollup(function(v) { return v.length; })
-		  .entries(data);
-
+	var totalIncidents = d3.nest()
+	  .key(function(d) { return d.country_txt; })
+	  .rollup(function(v) { return v.length; })
+	  .entries(data);
 
     function top50countries(totalIncidents) {
         return totalIncidents.sort(function (a, b) {
@@ -272,23 +265,20 @@
 	var topCountriesForLine = countryByYear.filter(function(d) {
 		return topCountriesByIncidentsNames.indexOf(d.key) !== -1;
 	});
-
 		// console.log(topCountriesForLine)
-
 		// structure is key: country, { key: year, values: deaths incident}
+	var valuesForXScale = d3.merge(topCountriesForLine.map(function(d) {return d.values;}));
+	var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
 
-		var valuesForXScale = d3.merge(topCountriesForLine.map(function(d) {return d.values;}));
-		var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
+	xScale.domain(
+		d3.extent(valuesForXScale, function(d) {
+			return yearFormat.parse(d.key);
+		}));
 
-		xScale.domain(
-			d3.extent(valuesForXScale, function(d) {
-				return yearFormat.parse(d.key);
-			}));
+	yScale.domain([1500,0]);
 
-		yScale.domain([1500,0]);
-
-		return topCountriesForLine;
-		}
+	return topCountriesForLine;
+	}
 
 		// HOW CAN I MAKE A RESCALE OF THE XSCALE WORK TO REDRAW THE DOMAIN BY DECADES? THANK YOU!!!
 
@@ -339,37 +329,36 @@
 
    	var topGroupsByIncidentsNames = topIncidents.map(function (d) {return d.key;}); // country names
 
-		var topGroupsForLine = groupByYear.filter(function(d) {
-			return topGroupsByIncidentsNames.indexOf(d.key) !== -1;
-		});
+	var topGroupsForLine = groupByYear.filter(function(d) {
+		return topGroupsByIncidentsNames.indexOf(d.key) !== -1;
+	});
 
-		// structure is key: country, { key: year, values: deaths incident}
+	// structure is key: country, { key: year, values: deaths incident}
 
-		var valuesForXScale = d3.merge(topGroupsForLine.map(function(d) {return d.values;}));
-		var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
+	var valuesForXScale = d3.merge(topGroupsForLine.map(function(d) {return d.values;}));
+	var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
 
-		xScale.domain(
-			d3.extent(valuesForXScale, function(d) {
-				return yearFormat.parse(d.key);
-			}));
+	xScale.domain(
+		d3.extent(valuesForXScale, function(d) {
+			return yearFormat.parse(d.key);
+		}));
 
 
-		yScale.domain([
-			d3.max(valuesForYScale, function(d) {
-					return d.incidents;
-			}),
-			0
-			]);
+	yScale.domain([
+		d3.max(valuesForYScale, function(d) {
+				return d.incidents;
+		}),
+		0
+		]);
 
-		d3.select("p.story").html("Group Text"); // HOW TO APPEND STORY?
+	d3.select("p.story").html("Group Text"); // HOW TO APPEND STORY?
 
-		return topGroupsForLine;
+	return topGroupsForLine;
 
-		}
+	}
 
 	}
 
 	makeChart1();
 
-
-	}); // end of data csv
+}); // end of data csv
