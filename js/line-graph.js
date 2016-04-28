@@ -10,7 +10,7 @@
 	function makeChart1() {
 
 	var fullwidth = 800;
-	var fullheight = 800;
+	var fullheight = 600;
 
 	var color = d3.scale.category10();
 

@@ -1,136 +1,136 @@
 
-	d3.csv("data/terrorism-groups-deaths.csv", function (error, data) {
+    d3.csv("data/terrorism-groups-deaths.csv", function (error, data) {
 
-		var yearFormat = d3.time.format("%Y");
+        var yearFormat = d3.time.format("%Y");
 
-		if (error) {
-			console.log("error reading file");
-		}
-
-
-	function makeChart3() {
-
-	var fullWidth = 900;
-	var fullHeight = 800;
-
-	// Setting up the Margins Here
-
-	var margin = {top: 20, right: 100, bottom: 50, left: 190};
-
-	var width = fullWidth - margin.left - margin.right;
-	var height = fullHeight - margin.top - margin.bottom;
-
-	var widthScale = d3.scale.linear()
-		.range([0, width]);
-
-	var heightScale = d3.scale.ordinal().rangeRoundBands([0,height], 0.4);
-
-	// Setting up the Axis Here
-
-	var xAxis = d3.svg.axis()
-		.scale(widthScale)
-		.orient("bottom")
-		.ticks(7);
-
-	var yAxis = d3.svg.axis()
-		.scale(heightScale)
-		.orient("left")
-		.innerTickSize([0]);
-
-	var svg = d3.select("#chart3")
-		.append("svg")
-		.attr("width", fullWidth)
-		.attr("height", fullHeight)
-		.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	d3.select(#deaths)
-
-	d3.csv("data/terrorism-groups-deaths.csv", function(error, data){
-
-		if (error) { 
-			console.log("Had an error loading file.");
- 		}
+        if (error) {
+            console.log("error reading file");
+        }
 
 
-		// Setting Up Scales
-	widthScale.domain([0,15000]);
-	heightScale.domain(data.map(function(d) {return d.group} ));
+    function makeChart3() {
 
-	var rects = svg.selectAll("rect")
-				.data(data)
-				.enter()
-				.append("rect");
+    var fullWidth = 900;
+    var fullHeight = 600;
 
-		rects.attr("x", 0)
+    // Setting up the Margins Here
 
-			.attr("y", function(d) {
-				return heightScale(d.group);
-			})
-			.attr("width", function(d) {
-				return widthScale(+d.deaths); // use your scale here:
-			})
-			.attr("height", heightScale.rangeBand())
-			.style("fill" , function(d){
+    var margin = {top: 20, right: 100, bottom: 50, left: 190};
 
-				if (d.category === "Islamic Fundamentalist") {
-					return "#343642";
-				}
-				else if (d.category === "Radical Political Leftists") {
-					return "#962D3E";
-				}
-				else if (d.category === "Jihadi Salafism") {
-					return "#348899";
-				}
-				else if (d.category === "Conservatism") {
-					return "#979C9C";
-				}
+    var width = fullWidth - margin.left - margin.right;
+    var height = fullHeight - margin.top - margin.bottom;
 
-				else if (d.category === "Separatists") {
-					return "#F2EBC7";
-				}
+    var widthScale = d3.scale.linear()
+        .range([0, width]);
 
-				else if (d.category === "Shia Jihadism") {
-					return "#00585F";
-				}
+    var heightScale = d3.scale.ordinal().rangeRoundBands([0,height], 0.4);
 
-				else {
-					return "#DEDEDE";
-				}
-				
-			})
+    // Setting up the Axis Here
 
-			.append("title") 
-			.attr("class", "tooltip") 
-			.text(function(d) {
-				return "Category:" + " " + d.category;
-			});
+    var xAxis = d3.svg.axis()
+        .scale(widthScale)
+        .orient("bottom")
+        .ticks(7);
 
-		// Adding Axis information
+    var yAxis = d3.svg.axis()
+        .scale(heightScale)
+        .orient("left")
+        .innerTickSize([0]);
 
-		svg.append("g")
-			.attr("class", "x axis")
-			.attr("transform", "translate(0," + height + ")")
-			.call(xAxis)
+    var svg = d3.select("#chart3")
+        .append("svg")
+        .attr("width", fullWidth)
+        .attr("height", fullHeight)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		svg.append("g")
-			.attr("class", "y axis")
-			.call(yAxis)
 
-		// Label Axis
+    d3.csv("data/terrorism-groups-deaths.csv", function(error, data){
 
-		svg.append("text")
-			.attr("class", "xlabel")
-			.attr("transform", "translate(" + width/2 + " ," +
-				height + ")")
-			.style("text-anchor", "middle")
-			.attr("dy", "35")
-			.text("Deaths");
+        if (error) { 
+            console.log("Had an error loading file.");
+        }
 
-	});
-	}
 
-	makeChart3();
+        // Setting Up Scales
+    widthScale.domain([0,15000]);
+    heightScale.domain(data.map(function(d) {return d.group} ));
+
+    var rects = svg.selectAll("rect")
+                .data(data)
+                .enter()
+                .append("rect");
+
+        rects.attr("x", 0)
+
+            .attr("y", function(d) {
+                return heightScale(d.group);
+            })
+            .attr("width", function(d) {
+                return widthScale(+d.deaths); // use your scale here:
+            })
+            .attr("height", heightScale.rangeBand())
+            .style("fill" , function(d){
+
+                if (d.category === "Islamic Fundamentalist") {
+                    return "#343642";
+                }
+                else if (d.category === "Radical Political Leftists") {
+                    return "#962D3E";
+                }
+                else if (d.category === "Jihadi Salafism") {
+                    return "#348899";
+                }
+                else if (d.category === "Conservatism") {
+                    return "#979C9C";
+                }
+
+                else if (d.category === "Separatists") {
+                    return "#F2EBC7";
+                }
+
+                else if (d.category === "Shia Jihadism") {
+                    return "#00585F";
+                }
+
+                else {
+                    return "#DEDEDE";
+                }
+
+                
+            })
+
+            .append("title") 
+            .attr("class", "tooltip") 
+            .text(function(d) {
+                return "Category:" + " " + d.category;
+            });
+
+        // Adding Axis information
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+
+        // Label Axis
+
+        svg.append("text")
+            .attr("class", "xlabel")
+            .attr("transform", "translate(" + width/2 + " ," +
+                height + ")")
+            .style("text-anchor", "middle")
+            .attr("dy", "35")
+            .text("Deaths");
+
+    });
+    }
+
+    makeChart3();
 
 }); // end of data csv
 
