@@ -1,21 +1,23 @@
 
-    d3.csv("data/terrorism-groups-deaths.csv", function (error, data) {
+function barChart(data) {
 
         var yearFormat = d3.time.format("%Y");
 
+<<<<<<< HEAD
+=======
         if (error) {
             console.log("error reading file");
         }
 
-
     function makeChart3() {
 
+>>>>>>> origin/gh-pages
     var fullWidth = 900;
     var fullHeight = 600;
 
     // Setting up the Margins Here
 
-    var margin = {top: 20, right: 100, bottom: 50, left: 190};
+    var margin = {top: 20, right: 100, bottom: 50, left: 250};
 
     var width = fullWidth - margin.left - margin.right;
     var height = fullHeight - margin.top - margin.bottom;
@@ -24,6 +26,19 @@
         .range([0, width]);
 
     var heightScale = d3.scale.ordinal().rangeRoundBands([0,height], 0.4);
+
+    // d3.select("#deaths")
+    //     .on("click", function(d,i) {
+    //         d3.select(this).classed("selected", true);
+    //         d3.select("#data2").classed("selected", false);
+    //         redraw(deathsData);
+    //     });
+    // d3.select("#terrorattacks")
+    //     .on("click", function(d,i) {
+    //         d3.select(this).classed("selected", true);
+    //         d3.select("#data1").classed("selected", false);
+    //         redraw(terrorData);
+    //     });
 
     // Setting up the Axis Here
 
@@ -44,6 +59,8 @@
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+<<<<<<< HEAD
+=======
 
     d3.csv("data/terrorism-groups-deaths.csv", function(error, data){
 
@@ -51,7 +68,10 @@
             console.log("Had an error loading file.");
         }
 
+        console.log(data);
 
+
+>>>>>>> origin/gh-pages
         // Setting Up Scales
     widthScale.domain([0,15000]);
     heightScale.domain(data.map(function(d) {return d.group} ));
@@ -127,10 +147,5 @@
             .attr("dy", "35")
             .text("Deaths");
 
-    });
-    }
-
-    makeChart3();
-
-}); // end of data csv
+}; // end of bar chart
 

@@ -1,11 +1,7 @@
 
-	d3.csv("data/terrorism-clean-data.csv", function (error, data) {
+function lineGraph(data) {
 
 		var yearFormat = d3.time.format("%Y");
-
-		if (error) {
-			console.log("error reading file");
-		}
 
 	function makeChart1() {
 
@@ -73,7 +69,7 @@
 		var groupData = makeCountryData(data);
 		drawGraph(countryData);
 
-		d3.select("p.story").text("Countries Story");
+		d3.select("p.story").text("In the 1980s, with the support of international communist parties and money from dug trafficking, criminal groups consolidated and in response, terrorist groups organized. The line between the two is blurred as they both committed terrorist attacks at one point or another. Terrorist groups active: National Liberation Army and Fuerzas Armadas (ELN), Revolucionares de Colombia (FARC), Autodefensas Unidas de Colombia (AUC)");
 	});
 
 	d3.select("button#seventy").on("click", function() {
@@ -364,4 +360,4 @@
 
 	makeChart1();
 
-}); // end of data csv
+}; // end of linegraph

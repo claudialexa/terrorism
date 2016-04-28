@@ -1,15 +1,10 @@
 
-	d3.csv("data/terrorism-clean-data.csv", function (error, data) {
+function smallMults(data) {
 
 		var yearFormat = d3.time.format("%Y");
 
-		if (error) {
-			console.log("error reading file");
-		}
 
 	// BEGIN: MAKEchart2 FUNCTION. ALL UNIVERSAL VARIABLES
-
-	function makechart2() {
 
 	var margin = {top: 8, right: 10, bottom: 2, left: 10},
     width = 200 - margin.left - margin.right,
@@ -27,13 +22,17 @@
 		.innerTickSize([0]);
 
 	var area = d3.svg.area()
-    .x(function(d) { return x(d.key); })
+    .x(function(d) { 
+    	return x(d.year); })
     .y0(height)
-    .y1(function(d) { return y(d.values.incidents); });
+    .y1(function(d) { 
+    	return y(+d.incidents); });
 
 	var line = d3.svg.line()
-    .x(function(d) { return x(d.key); })
-    .y(function(d) { return y(d.values.incidents); });
+    .x(function(d) { 
+    	return x(d.year); })
+    .y(function(d) { 
+    	return y(+d.incidents); });
 
 	//BEGIN: CALL CURRENT DATA//
 	var regionData = makeRegionData(data);
@@ -67,11 +66,11 @@
 	 var regionByYear = d3.nest()
      .key(function(d) { return d.region_txt; })
      .sortKeys(d3.ascending)
-     .key(function(d) {return d.iyear;})
+     .key(function(d) { return d.iyear; })
      .sortKeys(function(a,b) {
      	return d3.ascending(yearFormat.parse(a), yearFormat.parse(b));
      })
-     .rollup(function(leaves) { 
+     .rollup(function(leaves) {
      		return { 
      		"incidents": leaves.length, 
      		"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
@@ -79,6 +78,16 @@
           };
       })
       .entries(data);
+
+      regionByYear.forEach(function(regions) {
+      	regions.values.forEach(function(yr) {
+      		yr.values.year = yearFormat.parse(yr.key);
+      	});
+      });
+
+     console.log("with years", regionByYear);
+
+
 
 	var totalRegionIncidents = d3.nest()
 	.key(function(d) { return d.region_txt; })
@@ -118,15 +127,12 @@
     function drawGraph(regionByYear) {
 
     	regionByYear.forEach(function(d) {
-    		d.maxIncidents = d3.min(d.values, function(d) { return +d.values.incidents; });
+    		d.maxIncidents = d3.max(d.values, function(d) { return +d.values.incidents; });
 		  });
 
-		x.domain([
-		d3.min(regionByYear, function(d) { return d.key; }),
-		d3.max(regionByYear, function(d) { return d.key; })
-		]);
+		var dompath = container.select("div#section2 div.row div.col-sm-9 div#chart2");
 
-		var chart2 = d3.select("#chart2")
+		var chart2 = dompath.selectAll("svg")
 	      .data(regionByYear)
 	      .enter().append("svg")
 	      .attr("width", width + margin.left + margin.right)
@@ -136,17 +142,37 @@
 
 	    chart2.append("path")
       	.attr("class", "area")
-      	.attr("d", function(d) { y.domain([0, d.maxIncidents]); return area(+d.values.incidents); });
+      	.attr("d", function(d) { 
+      		y.domain([0, d.maxIncidents]);
+      		x.domain(d3.extent(d.values, function(x) {
+      			return yearFormat.parse(x.key);
+      		}));
+      		var data = d.values.map(function(d) {
+      			if (d.values) {
+      				return d.values;
+      			}
+      		});
+      		console.log(data);
+      		return area(data);
+      	});
 
       	chart2.append("path")
       	.attr("class", "line")
-      	.attr("d", function(d) { y.domain([0, d.maxIncidents]); return line(+d.values.incidents); });
+      	.attr("d", function(d) { 
+      		y.domain([0, d.maxIncidents]);
+      		x.domain(d3.extent(d.values, function(x) {
+      			return yearFormat.parse(x.key);
+      		}));
+      		var data = d.values.map(function(d) {
+      			if (d.values) {
+      				return d.values;
+      			}
+      		});
+      		console.log(data);
+      		return line(data);
+      	});
 
     }
 
-} //END: MAKECHART2
-
-	makechart2();
-
-}); // end of data csv
+}; // end of function
 

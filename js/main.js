@@ -1,26 +1,41 @@
-// SETTING UP SECTIONS
 
+<<<<<<< HEAD
+var container = d3.select(".container");
+
+function ready(error, data1, data2) {
+=======
 $(document).ready(function() {
 	$('#fullpage').fullpage({
 	    verticalCentered: true,
-	    anchors: ['anchor1', 'anchor2', 'anchor3', 'anchor4'],
+	    anchors: ['anchor1', 'anchor2', 'anchor3', 'anchor4', 'anchor5'],
 	    sectionsColor: ['#ffffff', '#ffffff', '#ffffff']
 	});
 });
+>>>>>>> origin/gh-pages
 
-// READY
+		if (error) {
+			console.log("error reading file");
+		}
 
-// function ready(error, data) {
+	lineGraph(data1);
+	smallMults(data1);
+	barChart(data2);
 
-// 	var yearFormat = d3.time.format("%Y");
-// 		if (error) {
-// 			console.log("error reading file");
-// 		}
-// }
+	/*
+	$(document).ready(function() {
+	
+		$('#fullpage').fullpage({
+	    verticalCentered: true,
+	    anchors: ['anchor1', 'anchor2', 'anchor3', 'anchor4', 'anchor5'],
+	    sectionsColor: ['#ffffff', '#ffffff', '#ffffff']
+		});
+	});
+*/
+}
 
 // QUEUE
 
-// queue()
-//     .defer(d3.csv, "data/terrorism-clean-data.csv")
-//     .defer(d3.csv, "data/terrorism-groups-deaths.csv")
-//     .await(ready);
+queue()
+	.defer(d3.csv, "data/terrorism-clean-data.csv")
+	.defer(d3.csv, "data/terrorism-groups-deaths.csv")
+	.await(ready);
