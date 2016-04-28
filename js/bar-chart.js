@@ -7,7 +7,6 @@
             console.log("error reading file");
         }
 
-
     function makeChart3() {
 
     var fullWidth = 900;
@@ -15,7 +14,7 @@
 
     // Setting up the Margins Here
 
-    var margin = {top: 20, right: 100, bottom: 50, left: 190};
+    var margin = {top: 20, right: 100, bottom: 50, left: 250};
 
     var width = fullWidth - margin.left - margin.right;
     var height = fullHeight - margin.top - margin.bottom;
@@ -24,6 +23,19 @@
         .range([0, width]);
 
     var heightScale = d3.scale.ordinal().rangeRoundBands([0,height], 0.4);
+
+    // d3.select("#deaths")
+    //     .on("click", function(d,i) {
+    //         d3.select(this).classed("selected", true);
+    //         d3.select("#data2").classed("selected", false);
+    //         redraw(deathsData);
+    //     });
+    // d3.select("#terrorattacks")
+    //     .on("click", function(d,i) {
+    //         d3.select(this).classed("selected", true);
+    //         d3.select("#data1").classed("selected", false);
+    //         redraw(terrorData);
+    //     });
 
     // Setting up the Axis Here
 
@@ -50,6 +62,8 @@
         if (error) { 
             console.log("Had an error loading file.");
         }
+
+        console.log(data);
 
 
         // Setting Up Scales

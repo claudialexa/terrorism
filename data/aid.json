@@ -1,0 +1,54 @@
+{
+ "name": "aid",
+ "children": [
+    {
+     "name": "1980s",
+     "children": [
+      {"name": "Israel", "size": 38122730020},
+      {"name": "Egypt", "size": 217117193678},
+      {"name": "Turkey", "size": 36951459354},
+      {"name": "Greece", "size": 34760254354},
+      {"name": "El Salvador", "size": 150328964176},
+      {"name": "Spain", "size": 120688964102},
+      {"name": "Peru", "size": 707450782682},
+      {"name": "Korea Republic", "size": 161923593254},
+      {"name": "Sudan", "size": 529863110077},
+      {"name": "Jordan", "size": 115512319085},
+      {"name": "Pakistan", "size": 198419483662}
+     ]
+    },
+    {
+     "name": "1990s",
+     "children": [
+      {"name": "El Salvador", "size": 575235426874},
+      {"name": "Israel", "size": 18590542107},
+      {"name": "Egypt", "size": 13206599648},
+      {"name": "Turkey", "size": 3531465420},
+      {"name": "Colombia", "size": 506146060},
+      {"name": "Philippines", "size": 414427473},
+      {"name": "Pakistan", "size": 189480000},
+      {"name": "Peru", "size": 113501381},
+      {"name": "India", "size": 2700000},
+      {"name": "Iraq", "size": 2543000},
+      {"name": "Burundi", "size": 1317000},
+      {"name": "Algeria", "size": 1122000} 
+     ]
+    },
+    {
+     "name": "2000s",
+     "children": [
+      {"name": "Afghanistan", "size": 41564461747},
+      {"name": "Iraq", "size": 21109979480},
+      {"name": "Congo", "size": 7553898981},
+      {"name": "Pakistan", "size": 3960033531},
+      {"name": "Colombia", "size": 2397241766},
+      {"name": "Lebanon", "size": 379797351},
+      {"name": "Oman", "size": 250016442},
+      {"name": "Yemen", "size": 158481800},
+      {"name": "El Salvador", "size": 123464816},
+      {"name": "Kenya", "size": 93147475},
+      {"name": "Bosnia and Herzegovina", "size": 92869136}
+     ]
+    }
+ ]
+}

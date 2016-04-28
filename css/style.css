@@ -27,12 +27,51 @@ p.caption {
 .wrap{
   margin-left: auto;
   margin-right: auto;
-  width: 960px;
+  width: 1200px;
   position: relative;
 }
 
+.chart4 {
+  margin: auto;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.node {
+  border: solid 1px white;
+  font: 10px sans-serif;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+.node-label {
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  background: lightgrey;
+  padding: 2px;
+  margin: 2px;
+  float: left;
+}
+
+.node:hover .node-container {
+  visibility: visible;
+}
+
+
 .btnrow {
   padding-bottom: 10px;
+}
+
+.uglylegend{
+  padding-top: 10px;
+  font-size: 13px;
 }
 
 .axis path,
@@ -118,4 +157,18 @@ text.linelabel {
   border: gray 1px solid;
   padding: 2px;
   max-width: 180px;
+}
+
+.tooltip {   
+      position: absolute;           
+      text-align: center;           
+      width: 60px;                  
+      height: 28px;                 
+      padding: 2px;             
+      font: 14px sans-serif bold;  
+      font-weight: bold;      
+      background-color: #dedede;   
+      border: 0px;      
+      border-radius: 8px;           
+      pointer-events: none;         
 }

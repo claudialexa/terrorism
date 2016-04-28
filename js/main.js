@@ -3,7 +3,7 @@
 $(document).ready(function() {
 	$('#fullpage').fullpage({
 	    verticalCentered: true,
-	    anchors: ['anchor1', 'anchor2', 'anchor3', 'anchor4'],
+	    anchors: ['anchor1', 'anchor2', 'anchor3', 'anchor4', 'anchor5'],
 	    sectionsColor: ['#ffffff', '#ffffff', '#ffffff']
 	});
 });
