@@ -6,9 +6,9 @@ function smallMults(data) {
 
 	// BEGIN: MAKEchart2 FUNCTION. ALL UNIVERSAL VARIABLES
 
-	var margin = {top: 8, right: 10, bottom: 2, left: 10},
-    width = 200 - margin.left - margin.right,
-    height = 150 - margin.top - margin.bottom;
+	var margin = {top: 25, right: 15, bottom: 25, left: 15},
+    width = 190 - margin.left - margin.right,
+    height = 130 - margin.top - margin.bottom;
 
     var x = d3.time.scale()
     .range([0, width]);
@@ -171,6 +171,16 @@ function smallMults(data) {
       		console.log(data);
       		return line(data);
       	});
+
+        chart2.append("text")
+          .attr("class", "label")
+          .attr("x", width/2)
+          .attr("y", -8)
+          .style("text-anchor", "middle")
+          .text(function(d) {
+            return d.key;
+          });
+
 
     }
 

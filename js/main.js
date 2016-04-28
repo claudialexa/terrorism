@@ -1,7 +1,7 @@
 
 var container = d3.select(".container");
 
-function ready(error, data1, data2) {
+function ready(error, data1, data2, data3) {
 
 		if (error) {
 			console.log("error reading file");
@@ -10,8 +10,9 @@ function ready(error, data1, data2) {
 	lineGraph(data1);
 	smallMults(data1);
 	barChart(data2);
+	// treeMap(data3);
 
-	/*
+	
 	$(document).ready(function() {
 	
 		$('#fullpage').fullpage({
@@ -20,7 +21,7 @@ function ready(error, data1, data2) {
 	    sectionsColor: ['#ffffff', '#ffffff', '#ffffff']
 		});
 	});
-*/
+
 }
 
 // QUEUE
@@ -28,4 +29,5 @@ function ready(error, data1, data2) {
 queue()
 	.defer(d3.csv, "data/terrorism-clean-data.csv")
 	.defer(d3.csv, "data/terrorism-groups-deaths.csv")
+	// .defer(d3.csv, "data/aid.json")
 	.await(ready);

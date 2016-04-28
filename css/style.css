@@ -77,7 +77,7 @@ form {
 .axis path,
 .axis line {
   fill: none;
-  stroke: #1E1E20;
+  stroke: #666666;
   shape-rendering: crispEdges;
 }
 
@@ -86,6 +86,10 @@ form {
   stroke: #999999;
   stroke-width: 1px;
 }
+
+rect:hover {
+      opacity: 0.6;
+      }
 
 .area {
   fill: #dedede;
@@ -123,8 +127,8 @@ text.bolder {
 }
 
 .label {
-  fill: #000000;
-  font-weight:bold;
+  fill: #666666;
+  font-size: 11px;
   z-index: 4;
 }
 

@@ -1,7 +1,7 @@
 
 function barChart(data) {
 
-        var yearFormat = d3.time.format("%Y");
+    var yearFormat = d3.time.format("%Y");
 
     var fullWidth = 900;
     var fullHeight = 600;
@@ -36,6 +36,10 @@ function barChart(data) {
         .attr("height", fullHeight)
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var tooltip = d3.select("#chart3")
+    .append("div")
+    .attr("class", "linetooltip");
 
         // Setting Up Scales
     widthScale.domain([0,15000]);
