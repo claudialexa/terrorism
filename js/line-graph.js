@@ -10,7 +10,7 @@
 	function makeChart1() {
 
 	var fullwidth = 800;
-	var fullheight = 600;
+	var fullheight = 800;
 
 	var color = d3.scale.category10();
 
@@ -122,14 +122,17 @@
 	      	.text(function(d) {
 	      		return d.country;
 	      	})
+	      	.style("stroke", function (d) {
+				return color (d.country);
+			})
 	      	.classed("linelabel", true);
 
 			lines
 			.enter()
 			.append("path")
-			.style("stroke", function (d) {
-				return color;
-			})
+			// .style("stroke", function (d) {
+			// 	return color (d.country);
+			// })
 			.attr("class", "line")
 			.on("mouseover", mouseoverFunc)
 			.on("mousemove", mousemoveFunc)
