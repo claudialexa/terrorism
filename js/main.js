@@ -17,6 +17,7 @@ function ready(error, data1, data2, data3) {
 	
 		$('#fullpage').fullpage({
 	    verticalCentered: true,
+	    autoScrolling:false,
 	    anchors: ['anchor1', 'anchor2', 'anchor3', 'anchor4', 'anchor5'],
 	    sectionsColor: ['#ffffff', '#ffffff', '#ffffff']
 		});

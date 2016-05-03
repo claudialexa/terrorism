@@ -9,7 +9,7 @@ function makeChart4(){
   var width = fullWidth - margin.left - margin.right;
   var height = fullHeight - margin.top - margin.bottom;
 
-  var color = d3.scale.category20c();
+  var color = d3.scale.category20();
 
   var treemap = d3.layout.treemap()
       .size([fullWidth, fullHeight])

@@ -13,6 +13,10 @@ h2 {
   font-size: 42px;
 }
 
+a {
+  font-color: #7E8AA2;
+}
+
 
 p.intro {
   font-family: 'Bree Serif', serif;
@@ -22,6 +26,17 @@ p.intro {
 p.caption {
   font-family: 'Bree Serif', serif;
   font-size: 14px;
+}
+
+p.caption-small {
+  font-family: 'Bree Serif', serif;
+  font-size: 12px;
+}
+
+p.caption-gray {
+  font-family: 'Bree Serif', serif;
+  font-size: 12px;
+  color: #DEDEDE;
 }
 
 .wrap{
@@ -83,7 +98,6 @@ form {
 
 .line {
   fill: none;
-  stroke: #999999;
   stroke-width: 1px;
 }
 
@@ -132,6 +146,12 @@ text.bolder {
   z-index: 4;
 }
 
+.labels {
+  fill: #666666;
+  font-size: 11px;
+  z-index: 4;
+}
+
 text.linelabel {
   font-size: 9pt;
   color: gray;
@@ -175,4 +195,20 @@ text.linelabel {
       border: 0px;      
       border-radius: 8px;           
       pointer-events: none;         
+}
+
+.bottom {
+  padding-bottom:10px;
+}
+
+
+#menu select {
+background: #ccc;
+   width: 220px;
+   padding: 5px;
+   font-size: 14px;
+   line-height: 1;
+   border: 0;
+   border-radius: 0;
+   height: 34px;
 }

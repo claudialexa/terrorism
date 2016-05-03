@@ -1,9 +1,6 @@
-
 function lineGraph(data) {
 
-		var yearFormat = d3.time.format("%Y");
-
-	function makeChart1() {
+	var yearFormat = d3.time.format("%Y");
 
 	var fullwidth = 800;
 	var fullheight = 600;
@@ -52,31 +49,115 @@ function lineGraph(data) {
 	//CURRENT DATA//
 
 	var countryData = makeCountryData(data);
-	drawGraph(countryData);
 
-	console.log(countryData);
+	// console.log(countryData);
 
 	//BEGIN: BUTTONS
 
-	d3.select("button#groups").on("click", function() {
+	d3.select("input.groups").on("click", function() {
 		var groupData = makeGroupData(data);
 		drawGraph(groupData);
-
-		d3.select("p.story").text("Groups Story");
 	});
 
-	d3.select("button#countries").on("click", function() {
+	d3.select("input.groups_unknown").on("click", function() {
+		var groupData = makeGroupData(data);
+		var filtered = groupData.filter(function(d) {
+			return d.key !== "Unknown";
+		});
+		drawGraph(filtered);
+	});
+
+	d3.select("input.countries").on("click", function() {
 		var groupData = makeCountryData(data);
 		drawGraph(countryData);
-
-		d3.select("p.story").text("Countries Story");
 	});
 
 	d3.select("button#seventy").on("click", function() {
-		var groupData = makeCountryData(data);
-		drawGraph(countryData);
-		rescale70s(); 
+		var countryData = makeCountryData(data);
+		var years = ["1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979"];
+		var seventies = countryData.map(function(c) {
+			var newyears = c.values.filter(function(y) {
+				return years.indexOf(y.key) !== -1;  // that means it's a year that matches the list
+				years
+			});
+			return {key: c.key, values: newyears}
+		});
+		drawGraph(seventies);
+		d3.select("p.decadesstory").html("<b>The 1970's</b> witnessed a rise in terrorism in <b>Italy</b> due to the Years of Lead, a time of socio-economic turmoil between the Red Brigades and the fascist government. In <b>Spain</b>, the Basque National Liberation Movement looked to gain their independence by inspiring fear in the Spanish government through a series of attack on top members of the administration. In the late 1970s, <b>El Salvador</b> began witnessing a rapid rise in terrorist attacks part of the Salvadoran civil war that would carry on well into the 90's");
 	});
+
+
+	d3.select("button#eighties").on("click", function() {
+		var countryData = makeCountryData(data);
+		var years = ["1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989"];
+		var eighties = countryData.map(function(c) {
+			var newyears = c.values.filter(function(y) {
+				return years.indexOf(y.key) !== -1;  // that means it's a year that matches the list
+				years
+			});
+			return {key: c.key, values: newyears}
+		});
+		drawGraph(eighties);
+		d3.select("p.decadesstory").html("<b>The 1980's</b> were a time of turmoil for many parts of South America. In <b>Peru</b>, terrorist group Shining Path shook the country and even took the Japanese embassy. In <b>Colombia</b>, with the support of international communist parties and money from dug trafficking, criminal groups consolidated and in response, terrorist groups organized. The line between the two is blurred as they both committed terrorist attacks at one point or another. In 1984 <b>Chile</b> saw its biggest spike in terrorism during the height of Augusto Pinochet's regimen.");
+	});
+
+	d3.select("button#nineties").on("click", function() {
+		var countryData = makeCountryData(data);
+		var years = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999"];
+		var nineties = countryData.map(function(c) {
+			var newyears = c.values.filter(function(y) {
+				return years.indexOf(y.key) !== -1;  // that means it's a year that matches the list
+				years
+			});
+			return {key: c.key, values: newyears}
+		});
+		drawGraph(nineties);
+	});
+
+	d3.select("button#thousands").on("click", function() {
+		var countryData = makeCountryData(data);
+		var years = ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009"];
+		var thousands = countryData.map(function(c) {
+			var newyears = c.values.filter(function(y) {
+				return years.indexOf(y.key) !== -1;  // that means it's a year that matches the list
+				years
+			});
+			return {key: c.key, values: newyears}
+		});
+		drawGraph(thousands);
+	});
+
+	d3.select("button#thousandtens").on("click", function() {
+		var countryData = makeCountryData(data);
+		var years = ["2010", "2011", "2012", "2013", "2014"];
+		var thousandtens = countryData.map(function(c) {
+			var newyears = c.values.filter(function(y) {
+				return years.indexOf(y.key) !== -1;  // that means it's a year that matches the list
+				years
+			});
+			return {key: c.key, values: newyears}
+		});
+		drawGraph(thousandtens);
+	});
+
+	// draw the initial axes
+	chart1.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + height + ")")
+			.call(xAxis);
+
+	chart1.append("g")
+			.attr("class", "y axis")
+			.call(yAxis);
+
+	chart1.append("text")
+			.attr("class", "ylabel")
+			.attr("transform","rotate(-90) translate(" + (-height/2) + ",0)")
+			.style("text-anchor", "middle")
+			.attr("dy", -80)
+			.text("Incidents");
+
+	drawGraph(countryData);
 
 	//END: BUTTONS
 
@@ -84,7 +165,8 @@ function lineGraph(data) {
 
 	function drawGraph(data) {
 
-		var color = d3.scale.category10();
+		//update scales for the current data set
+		updateScalesIncidents(data);
 
 		var groups = chart1.selectAll("g.lines")
 			.data(data);
@@ -93,18 +175,11 @@ function lineGraph(data) {
 			.enter()
 			.append("g")
 			.attr("class", "lines")
-			// .style("stroke", "gray")
 			.on("mouseover", mouseoverFunc)
 			.on("mousemove", mousemoveFunc)
 			.on("mouseout",	mouseoutFunc);
 
-		// QUESTION: HOW DO I GET LAST VALUE OF EACH LINE TO APPEND LABELS (for country and terrorist incidents?
-		groups.append("text")
-			.datum(function(d) {
-				var lastx = d.values[d.values.length-1] // how can I access the key which is the last year? the last incident for the last year is in here how can I get it out?
-				// var lasty = d.incidents.length-1]
-				// console.log(d.key, lastx, lasty);
-			})
+		// APPEND LABELS HERE
 
 		groups.exit()
 			.remove();
@@ -112,68 +187,56 @@ function lineGraph(data) {
 		var lines = groups.selectAll("path")
 			.data(function(d) {
 				return [ d.values ];
-			})
-			.attr("x", 3)
-	      	.attr("dy", 3)
-	      	.text(function(d) {
-	      		return d.country;
-	      	})
-	      	.style("stroke", function (d) {
-				return color (d.country);
-			})
-	      	.classed("linelabel", true);
+			});
+
 
 			lines
 			.enter()
-			.append("path")
-			// .style("stroke", function (d) {
-			// 	return color (d.country);
-			// })
-			.attr("class", "line")
-			.on("mouseover", mouseoverFunc)
-			.on("mousemove", mousemoveFunc)
-			.on("mouseout",	mouseoutFunc);
-			
+			.append("path");
 
 			lines.transition()
 			.duration(1000)
-			.attr("d", line); 
+			.attr("d", line);
 
+			lines
+			.classed("line", true)
+			.style("stroke", function (d) {
+				if (typeof(d[0]) !== "undefined" && (d[0].values.country == "Afghanistan" || d[0].values.country == "Iraq" || d[0].values.country == "Pakistan" || d[0].values.country == "Syria")) {
+					return "#BEDB39"; 
+				} else if (typeof(d[0]) !== "undefined" && (d[0].values.country == "Colombia" || d[0].values.country == "Peru" || d[0].values.country == "Peru" || d[0].values.country == "Chile")) {
+					return "#962D3E";
+				}
+				else if (typeof(d[0]) !== "undefined" && (d[0].values.country == "El Salvador" || d[0].values.country == "Guatemala")) {
+					return "#ACCFCC";
+				}
+				else if (typeof(d[0]) !== "undefined" && (d[0].values.country == "Ukraine" || d[0].values.country == "Ireland" || d[0].values.country == "United Kingdom" || d[0].values.country == "Italy" || d[0].values.country == "Spain" || d[0].values.country == "France")) {
+					return "#7E8AA2";
+				}
+				else if (typeof(d[0]) !== "undefined" && (d[0].values.country == "Somalia" || d[0].values.country == "Nigeria" || d[0].values.country == "Algeria" || d[0].values.country == "Egypt" || d[0].values.country == "Libya")) {
+					return "#00585F";
+				} else if (typeof(d[0]) !== "undefined" && (d[0].values.country == "Philippines" || d[0].values.country == "Thailand" || d[0].values.country == "Yemen" || d[0].values.country == "Turkey" || d[0].values.country == "India" || d[0].values.country == "Israel")) {
+					return "#FFD393";
+				} else if (typeof(d[0]) !== "undefined" && (d[0].values.group == "Taliban" || d[0].values.group == "Boko Haram" || d[0].values.group == "Al-Qa'ida in the Arabian Peninsula AQAP" || d[0].values.group == "Al-Qa'ida in Iraq")) {
+					return "#343642";
+				}
+				else if (typeof(d[0]) !== "undefined" && (d[0].values.group == "Islamic State of Iraq and the Levant (ISIL)" || d[0].values.group == "Al-Shabaab")) {
+					return "#348899";
+				}
+				else if (typeof(d[0]) !== "undefined" && (d[0].values.group == "Taliban")) {
+					return "pink";
+				}
+				else {
+					return "#DEDEDE";
+				}
+			})
+			.on("mouseover", mouseoverFunc)
+			.on("mousemove", mousemoveFunc)
+			.on("mouseout",	mouseoutFunc);
 
 			lines.exit().remove();
 
-
-		var circles = groups.selectAll("circle")
-			.data(function(d) {
-				return d.values;
-			});
-
-			circles
-			.enter()
-			.append("circle");
-
-			circles.transition()
-			.attr("cx", function(d) {
-				return xScale(yearFormat.parse(d.key));
-			})
-			.attr("cy", function(d) {
-				return yScale(+d.values.incidents);
-			})
-			// .style("fill", function (d) {
-			// 	return color(d.values.incidents);
-			// })
-			.duration(2000)
-			.attr("r", 0);
-
-		circles.exit().remove();
-
-		d3.select("p.story").text("Countries Story");
-
-		d3.selection.prototype.moveToFront = function() {
-		      return this.each(function(){
-		        this.parentNode.appendChild(this);
-		    	});
-		}
+		chart1.select("g.x.axis").transition().call(xAxis);
+		chart1.select("g.y.axis").transition().call(yAxis);
 
 		function mouseoverFunc(d) {
 			d3.select(this)
@@ -208,26 +271,6 @@ function lineGraph(data) {
 
 
   	} //END: DRAWGRAPH FUNCTION
-
-  	//BEGIN: AXES - They are the same for all 
-
-	chart1.append("g")
-			.attr("class", "x axis")
-			.attr("transform", "translate(0," + height + ")")
-			.call(xAxis);
-
-	chart1.append("g")
-			.attr("class", "y axis")
-			.call(yAxis);
-
-	chart1.append("text")
-			.attr("class", "ylabel")
-			.attr("transform","rotate(-90) translate(" + (-height/2) + ",0)")
-			.style("text-anchor", "middle")
-			.attr("dy", -80)
-			.text("Incidents");
-
-	// END: AXES - They are the same for all 
 
   	function makeCountryData(data) {
 
@@ -266,6 +309,8 @@ function lineGraph(data) {
 	});
 		// console.log(topCountriesForLine)
 		// structure is key: country, { key: year, values: deaths incident}
+
+		/*
 	var valuesForXScale = d3.merge(topCountriesForLine.map(function(d) {return d.values;}));
 	var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
 
@@ -274,7 +319,7 @@ function lineGraph(data) {
 			return yearFormat.parse(d.key);
 		}));
 
-	yScale.domain([1500,0]);
+	yScale.domain([1500,0]); */
 
 	return topCountriesForLine;
 	}
@@ -305,8 +350,8 @@ function lineGraph(data) {
 	     .sortKeys(function(a,b) {
 	     	return d3.ascending(yearFormat.parse(a), yearFormat.parse(b));
 	     })
-	     .rollup(function(leaves) { return { 
-	     	"incidents": leaves.length, 
+	     .rollup(function(leaves) { return {
+	     	"incidents": leaves.length,
 	     	"deaths": d3.sum(leaves, function(d) { return +d.nkill; }),
 	     	"group": leaves[0].gname
 	          };
@@ -334,7 +379,15 @@ function lineGraph(data) {
 
 	// structure is key: country, { key: year, values: deaths incident}
 
-	var valuesForXScale = d3.merge(topGroupsForLine.map(function(d) {return d.values;}));
+	d3.select("p.story").html("Group Text"); // HOW TO APPEND STORY?
+
+	return topGroupsForLine;
+
+	}
+
+	function updateScalesIncidents(data) {
+
+	var valuesForXScale = d3.merge(data.map(function(d) {return d.values;}));
 	var valuesForYScale = valuesForXScale.map(function(d) {return d.values;});
 
 	xScale.domain(
@@ -349,15 +402,13 @@ function lineGraph(data) {
 		}),
 		0
 		]);
-
-	d3.select("p.story").html("Group Text"); // HOW TO APPEND STORY?
-
-	return topGroupsForLine;
-
 	}
-
-	}
-
-	makeChart1();
 
 }; // end of linegraph
+
+
+d3.selection.prototype.moveToFront = function() {
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+    	});
+}

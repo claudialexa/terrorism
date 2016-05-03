@@ -10,7 +10,7 @@ function smallMults(data) {
     width = 190 - margin.left - margin.right,
     height = 130 - margin.top - margin.bottom;
 
-    var x = d3.time.scale()
+  var x = d3.time.scale()
     .range([0, width]);
 
 	var y = d3.scale.linear()
@@ -38,17 +38,6 @@ function smallMults(data) {
 	var regionData = makeRegionData(data);
 	drawGraph(regionData);
 	//END: CALL CURRENT DATA//
-
-	//BEGIN: BUTTONS
-
-	d3.select("button#asia").on("click", function() {
-		var groupData = makeRegionDataAsia(data);
-		drawGraph(RegionDataAsia);
-
-		d3.select("p.story").text("Asia Story");
-	});
-
-	//END: BUTTONS
 
 	function mouseoverFunc(d) {
 	}
@@ -130,7 +119,7 @@ function smallMults(data) {
     		d.maxIncidents = d3.max(d.values, function(d) { return +d.values.incidents; });
 		  });
 
-		var dompath = container.select("div#section2 div.row div.col-sm-9 div#chart2");
+		var dompath = container.select("div#section3 div.row div.col-sm-9 div#chart2");
 
 		var chart2 = dompath.selectAll("svg")
 	      .data(regionByYear)
@@ -180,6 +169,14 @@ function smallMults(data) {
           .text(function(d) {
             return d.key;
           });
+
+        // Adding last value for x axis
+        // chart2.append("text")
+        //   .attr("class", "label")
+        //   .attr("x", 0)
+        //   .attr("y", height + margin.bottom/2)
+        //   .style("text-anchor", "start")
+        //   .text(function(d) { return d.key.values[0] });
 
 
     }

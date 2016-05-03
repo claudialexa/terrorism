@@ -1,14 +1,10 @@
 
 function barChart(data) {
 
-    var yearFormat = d3.time.format("%Y");
-
-    var fullWidth = 900;
+    var fullWidth = 850;
     var fullHeight = 600;
 
-    // Setting up the Margins Here
-
-    var margin = {top: 20, right: 100, bottom: 50, left: 190};
+    var margin = {top: 20, right: 100, bottom: 50, left: 20};
 
     var width = fullWidth - margin.left - margin.right;
     var height = fullHeight - margin.top - margin.bottom;
@@ -17,8 +13,6 @@ function barChart(data) {
         .range([0, width]);
 
     var heightScale = d3.scale.ordinal().rangeRoundBands([0,height], 0.4);
-
-    // Setting up the Axis Here
 
     var xAxis = d3.svg.axis()
         .scale(widthScale)
@@ -37,29 +31,50 @@ function barChart(data) {
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    var column = d3.select("#menu select").property("value");
+    var dataset = top35_by_column(data, column);
+
+        console.log(column, dataset);
+        redraw(dataset, column);
+
+    d3.select("#menu select")
+        .on("change", function() {
+            column = d3.select("select").property("value");
+            dataset = top35_by_column(data, column);
+            console.log(column, dataset);
+            redraw(dataset, column);
+    });
+
+    function top35_by_column(data, column) {
+        return data.sort(function (a, b) {
+            return b[column] - a[column];
+        }).slice(0,35);
+    }
+
     var tooltip = d3.select("#chart3")
     .append("div")
     .attr("class", "linetooltip");
 
-        // Setting Up Scales
-    widthScale.domain([0,15000]);
-    heightScale.domain(data.map(function(d) {return d.group} ));
+    function redraw(data, column) {
 
-    var rects = svg.selectAll("rect")
-                .data(data)
-                .enter()
-                .append("rect");
+        console.log(column);
 
-        rects.attr("x", 0)
+        var max = d3.max(data, function(d) {return +d[column];});
 
-            .attr("y", function(d) {
-                return heightScale(d.group);
-            })
-            .attr("width", function(d) {
-                return widthScale(+d.deaths); // use your scale here:
-            })
-            .attr("height", heightScale.rangeBand())
-            .style("fill" , function(d){
+        xScale = d3.scale.linear()
+            .domain([0, max])
+            .range([0, width]);
+
+        yScale = d3.scale.ordinal()
+            .domain(d3.range(data.length))
+            .rangeBands([0, height], .4);
+
+
+        var bars = svg.selectAll("rect.bar")
+            .data(data, function (d) { return d.group;}); 
+
+        bars
+            .attr("fill", function(d){
 
                 if (d.category === "Islamic Fundamentalist") {
                     return "#343642";
@@ -89,32 +104,80 @@ function barChart(data) {
                 
             })
 
-            .append("title") 
-            .attr("class", "tooltip") 
-            .text(function(d) {
-                return "Category:" + " " + d.category;
+        bars.enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("fill", function(d){
+
+                if (d.category === "Islamic Fundamentalist") {
+                    return "#343642";
+                }
+                else if (d.category === "Radical Political Leftists") {
+                    return "#962D3E";
+                }
+                else if (d.category === "Jihadi Salafism") {
+                    return "#348899";
+                }
+                else if (d.category === "Conservatism") {
+                    return "#979C9C";
+                }
+
+                else if (d.category === "Separatists") {
+                    return "#BEDB39";
+                }
+
+                else if (d.category === "Shia Jihadism") {
+                    return "#00585F";
+                }
+
+                else {
+                    return "#DEDEDE";
+                }
+                
             });
 
-        // Adding Axis information
+        bars.exit()
+            .transition()
+            .duration(300)
+            .attr("width", 0)
+            .remove();
 
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis)
+        bars
+            .transition()
+            .duration(300)
+            .attr("width", function(d) {
+                return xScale(+d[column]);
+            })
+            .attr("height", yScale.rangeBand())
+            .attr("transform", function(d,i) {
+                return "translate(" + [0, yScale(i)] + ")"
+            });
 
-        svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis)
 
-        // Label Axis
+        var labels = svg.selectAll("text.labels")
+            .data(data, function (d) { return d.group;}); 
 
-        svg.append("text")
-            .attr("class", "xlabel")
-            .attr("transform", "translate(" + width/2 + " ," +
-                height + ")")
-            .style("text-anchor", "middle")
-            .attr("dy", "35")
-            .text("Deaths");
+        labels.enter()
+            .append("text")
+            .attr("class", "labels");
+
+        labels.exit()
+            .remove();
+
+        labels.transition()
+            .duration(300)
+            .text(function(d) {
+                return d.group + " " + d[column];
+            })
+            .attr("transform", function(d,i) {
+                    return "translate(" + xScale(+d[column]) + "," + yScale(i) + ")"
+            })
+            .attr("dy", "0.8em")
+            .attr("dx", "3px")
+            .attr("text-anchor", "start");
+
+
+        } // end of draw function
 
 }; // end of bar chart
 

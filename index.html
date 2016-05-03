@@ -27,8 +27,9 @@
 
     <div class="section col-sm-12" id="section0">
           <h1>Patterns of Terrorism</h1>
-          <p>When looking at the portrait of terrorism in the past thirty years, much has changed. Strategy, location, motivation and scale have all shifted with the times, but there is always one constant factor setting the stage for attacks: unrest. Whether it be a struggle for power between political factions or religious conflict, each terrorist campaign was triggered by unrest and frustration.</p>
-          <p class="caption">By: Claudia Aguirre, Interactive Media MFA University of Miami</p>
+          <p>A look into the devolution of terrorism: the ideologies behind terrorist groups, their growth and geographical expandion.</p>
+          <p class="caption">By: <a href="http://www.claudiaguirre.com" target="_blank">Claudia Aguirre</a>, Interactive Media MFA University of Miami <a href="http://twitter.com/clexaa" target="_blank">Twitter</a></p>
+          <p class="caption-gray">Data Sources: </p>
     </div>
 
       <div class="section col-sm-12" id="section1">
@@ -40,48 +41,39 @@
           <div class="col-sm-4">
             <div class="row">
               <h2>Terrorist Attacks Around the World</h2>
-              <p>Terrorist attacks have increased by 8000% since the 1970s.From 1970 until 1995, suicide attacks were non-existent. Modern terrorist groups are more likely to use Medieval practices outlined in religious texts than their predecessors, making for violence that had rarely been seen in the past twenty years. Modern terrorists are also no longer restricted to national borders as they were in Latin America in the 80s and 90s. Islamic Extremists' cells expand well beyond their headquarters, expanding terror along the entire Middle East.</p>
+              <p>When looking at the portrait of terrorism in the past thirty years, much has changed. Strategy, location, motivation and scale have all shifted with the times, but there is always one constant factor setting the stage for attacks: unrest.</p>
 
-              <p class="story"></p>
+              <p class="decadesstory"></p>
 
               <p class="caption">EXPLORE THE DATA:</p>
             </div>
 
-            <div class="row btnrow">
-              <button id="countries" class="btn btn-default">By Country</button> 
-          
-            </div>
-            <div class="row btnrow">
-              <button id="groups" class="btn btn-default">By Terrorist Group</button>
+            <div class="row bottom">
+              <p class="caption-small">BY COUNTRY:</p>
+              <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option2" class="countries">By Country, All Decades</input></label>
             </div>
 
-            <div class="row">
+            <div class="row bottom">
               <button id="seventy" class="btn btn-default">1970s</button> 
-              <button id="80s" class="btn btn-default">1980s</button> 
-              <button id="90s" class="btn btn-default">1980s</button> 
-              <button id="00s" class="btn btn-default">1980s</button> 
-              <button id="10s" class="btn btn-default">2010-2014</button> 
+              <button id="eighties" class="btn btn-default">1980s</button> 
+              <button id="nineties" class="btn btn-default">1990s</button> 
+              <button id="thousands" class="btn btn-default">2000s</button> 
+              <button id="thousandtens" class="btn btn-default">2010-2014</button>  
             </div>
+
+            <div class="row bottom">
+              <p class="caption-small">BY TERRORIST GROUP:</p>
+
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option2" class="groups"> By Terrorist Group</input><br/>
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option3" class="groups_unknown"> Uknown Terrorist Groups Filtered Out</input>
+            </div>
+               
           </div>
         </div>
   </div> <!-- section 1 -->
 
-  <div class="section col-sm-12" id="section2">
-        <div class="row">
-          <div class="col-sm-9">
-            <div id="chart2"></div>
-          </div>
-
-          <div class="col-sm-3">
-            <div class="row">
-              <h2>Areas of Turmoil</h2>
-              <p>Description</p>
-            </div>
-          </div>
-        </div>
-  </div> <!-- section 2-->
-
-  <div class="section col-sm-12" id="section3">
+  <div class="section col-sm-12" id="section2"><!--section 2-->
         <div class="row">
           <div class="col-sm-9">
             <div id="chart3"></div>
@@ -98,7 +90,7 @@
                <svg width="10" height="10"><rect width="20" height="20" style="fill:#962D3E;"/></svg> Radical Political Leftistst<br/>
                <svg width="10" height="10"><rect width="20" height="20" style="fill:#348899;"/></svg> Jihadi Salafism<br/>
                <svg width="10" height="10"><rect width="20" height="20" style="fill:#979C9C;"/></svg> Conservatism<br/>
-               <svg width="10" height="10"><rect width="20" height="20" style="fill:#F2EBC7;"/></svg> Separatists<br/>
+               <svg width="10" height="10"><rect width="20" height="20" style="fill:#BEDB39;"/></svg> Separatists<br/>
                <svg width="10" height="10"><rect width="20" height="20" style="fill:#00585F;"/></svg> Shia Jihadism<br/>
               <svg width="10" height="10"><rect width="20" height="20" style="fill:#DEDEDE;"/></svg> Other<br/>
 
@@ -107,12 +99,31 @@
 
             <div class="row">
               <p class="caption">EXPLORE THE DATA:</p>
-              <button id="deaths" class="btn btn-default">Deaths</button> 
-              <button id="terrorattacks" class="btn btn-default">Incidents</button> 
+              <div id="menu">
+                <select ng-model='discussionsSelect' class='form-control'>
+                  <option value="deaths">Deaths</option>
+                  <option value="incidents">Incidents</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
-  </div> <!--section 3-->
+  </div> <!--section 2-->
+
+  <div class="section col-sm-12" id="section3"><!-- section 3-->
+        <div class="row">
+          <div class="col-sm-9">
+            <div id="chart2"></div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="row">
+              <h2>Areas of Turmoil</h2>
+              <p>Modern terrorists are no longer restricted to national borders as they were in Latin America in the 80s and 90s, when terrorist groups' reach only expanded as far as they could spread sub-groups along any given territory.  As a result, Islamic Extremists' cells expand well beyond their headquarters during the past 15 years, expanding terror along the entire Middle East and North Africa into Sub-Saharan Africa and Central and East Asia.</p>
+            </div>
+          </div>
+        </div>
+  </div> <!-- section 3-->
 
   <div class="section col-sm-12" id="section4">
         <div class="row">
@@ -122,8 +133,13 @@
 
           <div class="col-sm-3">
             <div class="row">
-              <h2>The United States' Military Foreign Spending by Decade</h2>
+              <h2>The U.S.' Military Foreign Spending by Decade</h2>
               <p>The United States have shown their support to hundreds of countries undergoing insurgencies and terrorist campaigns through military aid. This sometimes meant siding with governments such as El Salvador's which tortured and killed civilians just as the insurgents attacking them did. The breakdown shows a greater involvement from the part of the American government in foreign security only after the 1990s. The data represented also includes financial support for countries during civil wars and conflicts against other nations.</p>
+              <div class="uglylegend">
+               <svg width="10" height="10"><rect width="20" height="20" style="fill:#AEC7E8;"/></svg> 1980's<br/>
+               <svg width="10" height="10"><rect width="20" height="20" style="fill:#FF7F0E;"/></svg> 1990's<br/>
+               <svg width="10" height="10"><rect width="20" height="20" style="fill:#FFBB78;"/></svg> 2000's
+             </div>
             </div>
           </div>
         </div>
