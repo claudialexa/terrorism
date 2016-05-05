@@ -83,7 +83,7 @@ function lineGraph(data) {
 			return {key: c.key, values: newyears}
 		});
 		drawGraph(seventies);
-		d3.select("p.decadesstory").html("<b>The 1970's</b> witnessed a rise in terrorism in <b>Italy</b> due to the Years of Lead, a time of socio-economic turmoil between the Red Brigades and the fascist government. In <b>Spain</b>, the Basque National Liberation Movement looked to gain their independence by inspiring fear in the Spanish government through a series of attack on top members of the administration. In the late 1970s, <b>El Salvador</b> began witnessing a rapid rise in terrorist attacks part of the Salvadoran civil war that would carry on well into the 90's");
+		d3.select("p.decadesstory").html("<div style='background-color:#ACCFCC; padding:.8em;'><b>The 1970's</b> witnessed a rise in terrorism in <b>Italy</b> due to the Years of Lead, a time of socio-economic turmoil between the Red Brigades and the fascist government. In <b>Spain</b>, the Basque National Liberation Movement looked to gain their independence by inspiring fear in the Spanish government through a series of attack on top members of the administration. In the late 1970s, <b>El Salvador</b> began witnessing a rapid rise in terrorist attacks part of the Salvadoran civil war that would carry on well into the 90's </div>");
 	});
 
 
@@ -98,8 +98,9 @@ function lineGraph(data) {
 			return {key: c.key, values: newyears}
 		});
 		drawGraph(eighties);
-		d3.select("p.decadesstory").html("<b>The 1980's</b> were a time of turmoil for many parts of South America. In <b>Peru</b>, terrorist group Shining Path shook the country and even took the Japanese embassy. In <b>Colombia</b>, with the support of international communist parties and money from dug trafficking, criminal groups consolidated and in response, terrorist groups organized. The line between the two is blurred as they both committed terrorist attacks at one point or another. In 1984 <b>Chile</b> saw its biggest spike in terrorism during the height of Augusto Pinochet's regimen.");
+		d3.select("p.decadesstory").html("<div style='background-color:#aab2c2; padding:.8em;'><b>The 1980's</b> were a time of turmoil for many parts of South America. In <b>Peru</b>, terrorist group Shining Path shook the country and even took the Japanese embassy. In <b>Colombia</b>, with the support of international communist parties and money from dug trafficking, criminal groups consolidated and in response, terrorist groups organized. The line between the two is blurred as they both committed terrorist attacks at one point or another. In 1984 <b>Chile</b> saw its biggest spike in terrorism during the height of Augusto Pinochet's regimen.</div>");
 	});
+
 
 	d3.select("button#nineties").on("click", function() {
 		var countryData = makeCountryData(data);
@@ -112,6 +113,7 @@ function lineGraph(data) {
 			return {key: c.key, values: newyears}
 		});
 		drawGraph(nineties);
+		d3.select("p.decadesstory").html("<div style='background-color:#ffe8c6; padding:.8em;'>In <b>the 1990's</b>, Colombia saw its biggest spike of terrorism mainly attributed to the Revolutionary Armed Forces of Colombia. In 1995, Pakistan witnessed the first suicide terrorist documented in history. Pakistan became a main target of terrorism by jihadi groups after its government decided to side with the international community on its stance against Islamic extremists.</div>");
 	});
 
 	d3.select("button#thousands").on("click", function() {
@@ -125,6 +127,7 @@ function lineGraph(data) {
 			return {key: c.key, values: newyears}
 		});
 		drawGraph(thousands);
+		d3.select("p.decadesstory").html("<div style='background-color:#D8EDF2; padding:.8em;'>The number of terrorist incidents in the Middle East, particularly Afghanistan, Pakistan and Iraq have been on a steady climb since the early <b>2000s</b>, up until the insurgency in 2008 that brought about an unprecedented number of attacks mostly all lead by Al Qaeda. In 2011, once the United States withdrew from Iraq, Al Qaeda freed hundreds of prisoners and set off a new wave of terrorist cells.</div>");
 	});
 
 	d3.select("button#thousandtens").on("click", function() {
