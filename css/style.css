@@ -5,7 +5,8 @@ body {
 
 h1{
   font-family: 'Bree Serif', serif;
-  font-size: 72px;
+  font-size: 76px;
+  color: #000000;
 }
 
 h2 {
@@ -13,14 +14,19 @@ h2 {
   font-size: 42px;
 }
 
-a {
-  font-color: #7E8AA2;
+.red {
+  color: #FF6138;
+  font-weight: bold;
+}
+
+a.link {
+  font-color: #666666;
 }
 
 
 p.intro {
   font-family: 'Bree Serif', serif;
-  font-size: 18px;
+  font-size: 22px;
 }
 
 p.caption {
@@ -36,7 +42,7 @@ p.caption-small {
 p.caption-gray {
   font-family: 'Bree Serif', serif;
   font-size: 12px;
-  color: #DEDEDE;
+  color: #666666;
 }
 
 .wrap{
@@ -92,7 +98,7 @@ form {
 .axis path,
 .axis line {
   fill: none;
-  stroke: #666666;
+  stroke: #dedede;
   shape-rendering: crispEdges;
 }
 

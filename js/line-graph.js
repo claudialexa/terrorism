@@ -83,7 +83,7 @@ function lineGraph(data) {
 			return {key: c.key, values: newyears}
 		});
 		drawGraph(seventies);
-		d3.select("p.decadesstory").html("<div style='background-color:#ACCFCC; padding:.8em;'><b>The 1970's</b> witnessed a rise in terrorism in <b>Italy</b> due to the Years of Lead, a time of socio-economic turmoil between the Red Brigades and the fascist government. In <b>Spain</b>, the Basque National Liberation Movement looked to gain their independence by inspiring fear in the Spanish government through a series of attack on top members of the administration. In the late 1970s, <b>El Salvador</b> began witnessing a rapid rise in terrorist attacks part of the Salvadoran civil war that would carry on well into the 90's </div>");
+		d3.select("p.decadesstory").html("<div style='background-color:#79BD8F; padding:.8em;'><b>The 1970's</b> witnessed a rise in terrorism in <b>Italy</b> due to the Years of Lead, a time of socio-economic turmoil between the Red Brigades and the fascist government. In <b>Spain</b>, the Basque National Liberation Movement looked to gain their independence by inspiring fear in the Spanish government through a series of attack on top members of the administration. In the late 1970s, <b>El Salvador</b> began witnessing a rapid rise in terrorist attacks part of the Salvadoran civil war that would carry on well into the 90's </div>");
 	});
 
 
@@ -141,6 +141,7 @@ function lineGraph(data) {
 			return {key: c.key, values: newyears}
 		});
 		drawGraph(thousandtens);
+		d3.select("p.decadesstory").html("<div style='background-color:#F2EBC7; padding:.8em;'>For the last five years, different types of Islamic extremist groups have expanded their reach within the Middle East and have reached countries in Africa such as Nigeria and Somalia through affiliate cells. For the most part, terrorist attacks remain concentrated in the Middle East, Asia and Africa with Ukraine as the outlier in Eastern Europe.</div>");
 	});
 
 	// draw the initial axes

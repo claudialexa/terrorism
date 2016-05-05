@@ -1,14 +1,14 @@
 
 function smallMults(data) {
 
-		var yearFormat = d3.time.format("%Y");
+	var yearFormat = d3.time.format("%Y");
 
 
 	// BEGIN: MAKEchart2 FUNCTION. ALL UNIVERSAL VARIABLES
 
 	var margin = {top: 25, right: 15, bottom: 25, left: 15},
-    width = 190 - margin.left - margin.right,
-    height = 130 - margin.top - margin.bottom;
+    width = 200 - margin.left - margin.right,
+    height = 170 - margin.top - margin.bottom;
 
   var x = d3.time.scale()
     .range([0, width]);
@@ -16,10 +16,16 @@ function smallMults(data) {
 	var y = d3.scale.linear()
     .range([height, 0]);
 
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .ticks(4)
+    .innerTickSize([0])
+    .orient("bottom");
+
 	var yAxis = d3.svg.axis()
 		.orient("left")
-		.ticks(5)
-		.innerTickSize([0]);
+		.ticks(4)
+		.outerTickSize([0]);
 
 	var area = d3.svg.area()
     .x(function(d) { 
@@ -38,17 +44,6 @@ function smallMults(data) {
 	var regionData = makeRegionData(data);
 	drawGraph(regionData);
 	//END: CALL CURRENT DATA//
-
-	function mouseoverFunc(d) {
-	}
-
-	
-	function mousemoveFunc(d) {
-	}
-
-
-	function mouseoutFunc(d) {
-	}
 
 	function makeRegionData(data) {
 
@@ -170,14 +165,14 @@ function smallMults(data) {
             return d.key;
           });
 
-        // Adding last value for x axis
-        // chart2.append("text")
-        //   .attr("class", "label")
-        //   .attr("x", 0)
-        //   .attr("y", height + margin.bottom/2)
-        //   .style("text-anchor", "start")
-        //   .text(function(d) { return d.key.values[0] });
+        chart2.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
 
+        // chart2.append("g") y axis showing up as 0....
+        //   .attr("class", "y axis")
+        //   .call(yAxis); 
 
     }
 
